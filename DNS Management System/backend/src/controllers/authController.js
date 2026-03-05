@@ -1,41 +1,50 @@
-import User from "../models/User.js";
+import User from "../models/User.js"
+import bcrypt from "bcrypt"
 
 export const signup = async (req, res) => {
   try {
-    const { username, email, password } = req.body;
+    const { username, role, email, password } = req.body
 
+    const hashedPassword = await bcrypt.hash(password,10)
+   
     const user = await User.create({
       username,
       email,
-      password,
-      role: "user",
+      password : hashedPassword,
+      role: role || "user",
       status: "active",
-    });
+    })
 
     res.json({
       message: "Signup successful ✅",
       user_id: user.user_id,
-    });
+    })
   } catch (error) {
     res.status(400).json({
       message: "Email already exists or invalid data ❌",
-    });
+      error:error
+    })
   }
-};
+}
 
 export const login = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password } = req.body
 
   const user = await User.findOne({
-    where: { email, password },
-  });
+    where: { email },
+  })
 
   if (!user) {
-    return res.status(401).json({ message: "Invalid credentials ❌" });
+      return res.status(404).json({ message: "User not found ❌" })
+  }
+
+  const isMatch = await bcrypt.compare(password,user.password);
+  if(!isMatch){
+      return res.status(401).json({ message: "Invalid credentials ❌" })
   }
 
   if (user.status !== "active") {
-    return res.status(403).json({ message: "Account inactive ❌" });
+    return res.status(403).json({ message: "Account inactive ❌" })
   }
 
   res.json({
@@ -47,5 +56,5 @@ export const login = async (req, res) => {
       role: user.role,
       status: user.status,
     },
-  });
-};
+  })
+}
