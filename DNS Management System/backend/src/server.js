@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import { sequelize, connectDB } from './config/database.js';
 import authRoutes from './routes/authRoutes.js'
 import adminOnlyRoutes from './routes/adminOnlyRoutes.js'
-
+import companyRoutes from './routes/companyRoutes.js'
 dotenv.config();
 
 const app=express();
@@ -21,6 +21,8 @@ app.get('/',(req,res)=>{
 app.use("/api/auth", authRoutes);
 
 app.use("/api/admin",adminOnlyRoutes)
+
+app.use('/api', companyRoutes)
 
 const startServer = async () => {
   await connectDB();

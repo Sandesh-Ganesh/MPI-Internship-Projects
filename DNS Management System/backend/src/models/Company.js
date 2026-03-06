@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize"
-import { sequelize } from "../config/database"
+import { sequelize } from "../config/database.js"
 
 const Company = sequelize.define(
     "Company",
@@ -28,3 +28,5 @@ const Company = sequelize.define(
     timestamps: false
   }
 )
+
+export default Company;
