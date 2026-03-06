@@ -13,6 +13,7 @@ const User = sequelize.define(
     username: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true
     },
 
     email: {
@@ -27,13 +28,13 @@ const User = sequelize.define(
     },
 
     role: {
-      type: DataTypes.STRING,
-      defaultValue: "user",
+      type: DataTypes.ENUM("ADMIN", "MANAGEMENT", "USER"),
+      defaultValue: "USER",
     },
 
     status: {
-      type: DataTypes.STRING,
-      defaultValue: "active",
+      type: DataTypes.ENUM("ACTIVE","INACTIVE"),
+      defaultValue: "ACTIVE",
     },
   },
   {
