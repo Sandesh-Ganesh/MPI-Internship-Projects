@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { sequelize, connectDB } from './config/db.js';
+import { sequelize, connectDB } from './config/database.js';
 import authRoutes from './routes/authRoutes.js'
 import adminOnlyRoutes from './routes/adminOnlyRoutes.js'
 
@@ -25,7 +25,7 @@ const startServer = async () => {
   await connectDB();
 
   // IMPORTANT: do NOT use force:true if table already exists
-  await sequelize.sync({ alter: true });
+  await sequelize.sync();
 
   console.log("Tables synced ✅");
 
