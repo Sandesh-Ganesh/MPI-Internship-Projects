@@ -20,3 +20,6 @@ build/
 
 # Sequelize / DB artifacts
 *.sqlite
+
+#docs
+./Database_Tables.xlsx
