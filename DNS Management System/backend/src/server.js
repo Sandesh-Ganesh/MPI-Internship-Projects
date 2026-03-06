@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { sequelize, connectDB } from './config/db.js';
 import authRoutes from './routes/authRoutes.js'
+import adminOnlyRoutes from './routes/adminOnlyRoutes.js'
 
 dotenv.config();
 
@@ -17,6 +18,8 @@ app.get('/',(req,res)=>{
 });
 
 app.use("/api/auth", authRoutes);
+
+app.use("/api/admin",adminOnlyRoutes)
 
 const startServer = async () => {
   await connectDB();
