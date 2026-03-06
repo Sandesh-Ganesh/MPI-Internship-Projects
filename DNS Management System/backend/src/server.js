@@ -17,6 +17,7 @@ app.get('/',(req,res)=>{
     res.send("DNS Management System backend is running");
 });
 
+
 app.use("/api/auth", authRoutes);
 
 app.use("/api/admin",adminOnlyRoutes)
