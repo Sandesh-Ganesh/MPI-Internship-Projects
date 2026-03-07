@@ -22,7 +22,7 @@ app.use("/api/auth", authRoutes);
 
 app.use("/api/admin",adminOnlyRoutes)
 
-app.use('/api', companyRoutes)
+app.use('/api/company', companyRoutes)
 
 const startServer = async () => {
   await connectDB();
