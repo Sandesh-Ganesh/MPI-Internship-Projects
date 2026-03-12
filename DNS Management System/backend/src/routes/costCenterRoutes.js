@@ -10,6 +10,7 @@ router.post("/costCenters", allowRoles("ADMIN"),createCostCenter)
 router.get("/costCenters/:id", getCostCenterById)
 router.get("/costCenters", getAllCostCenters)
 router.put("/costCenters/:id", allowRoles("ADMIN","MANAGER"), updateCostCenter)
-router.delete("/costCenters/:id",allowRoles("ADMIN"), deleteCostCenter)
+// Soft delete
+router.patch("/costCenters/:id",allowRoles("ADMIN"), deleteCostCenter)
 
 export default router;
