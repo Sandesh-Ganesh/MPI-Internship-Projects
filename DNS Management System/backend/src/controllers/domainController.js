@@ -6,6 +6,7 @@ export const createDomain = async (req,res)=>{
     const {
       domain_name,
       company_id,
+      zone_id,
       cost_center_id,
       vendor_id,
       control_panel_id,
@@ -32,6 +33,7 @@ export const createDomain = async (req,res)=>{
     const domain = await Domain.create({
       domain_name,
       company_id,
+      zone_id,
       cost_center_id,
       vendor_id,
       control_panel_id,
