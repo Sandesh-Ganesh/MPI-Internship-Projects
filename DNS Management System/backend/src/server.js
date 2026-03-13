@@ -7,6 +7,7 @@ import adminOnlyRoutes from './routes/adminOnlyRoutes.js'
 import companyRoutes from './routes/companyRoutes.js'
 import vendorRoutes from './routes/vendorRoutes.js'
 import controlPanelRoutes from './routes/controlPanelRoutes.js'
+import costCenterRoutes from './routes/costCenterRoutes.js';
 
 dotenv.config();
 
@@ -30,6 +31,8 @@ app.use('/api/company', companyRoutes)
 app.use("/api/vendors",vendorRoutes)
 
 app.use("/api/controlPanels",controlPanelRoutes)
+
+app.use("/api/costCenters",costCenterRoutes)
 
 const startServer = async () => {
   await connectDB();
