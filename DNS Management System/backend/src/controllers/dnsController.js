@@ -1,4 +1,25 @@
-import getExternalDnsRecords  from '../services/dnsService.js';
+import getExternalDnsRecords  from '../services/cloudflareService.js';
+import DNSRecord from "../models/DNSRecord.js"
+
+export const getDnsRecordsByDomain = async (req,res)=>{
+  try{
+
+    const {domain_id} = req.params
+
+    const records = await DNSRecord.findAll({
+      where:{domain_id}
+    })
+
+    res.json(records)
+
+  }catch(error){
+
+    res.status(500).json({
+      message:error.message
+    })
+
+  }
+};
 
 export const fetchDnsRecords = async (req, res) => {
   try {
@@ -23,3 +44,21 @@ export const fetchDnsRecords = async (req, res) => {
     throw error; 
   }
 };
+
+export const getDNSRecordsByDomain = async(req,res)=>{
+  try{
+
+    const {domain_id} = req.params
+
+    const records = await DNSRecord.findAll({
+      where:{domain_id}
+    })
+
+    return res.status(200).json(records)
+
+  }catch(error){
+    return res.status(500).json({
+      message:error.message
+    })
+  }
+}
