@@ -1,5 +1,5 @@
 import { DataTypes } from "sequelize"
-import sequelize from "../config/database.js"
+import { sequelize } from "../config/database.js"
 
 const ControlPanel = sequelize.define(
   "ControlPanel",
@@ -37,8 +37,8 @@ const ControlPanel = sequelize.define(
 
     status: {
       type: DataTypes.ENUM("ACTIVE","INACTIVE"),
-      defaultValue: "ACTIVE",
-      allowNull: false
+      allowNull: false,
+      defaultValue: "ACTIVE"
     }
   },
   {
