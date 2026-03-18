@@ -7,6 +7,7 @@ export const createDomain = async (req,res)=>{
       domain_name,
       company_id,
       zone_id,
+      api_key,
       cost_center_id,
       vendor_id,
       control_panel_id,
