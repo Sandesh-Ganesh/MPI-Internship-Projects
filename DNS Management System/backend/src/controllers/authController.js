@@ -12,7 +12,7 @@ export const signup = async (req, res) => {
       email,
       password : hashedPassword,
       role: role || "user",
-      status: "active",
+      status: "ACTIVE",
     })
 
     res.json({
@@ -43,7 +43,7 @@ export const login = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials ❌" })
   }
 
-  if (user.status !== "active") {
+  if (user.status !== "ACTIVE") {
     return res.status(403).json({ message: "Account inactive ❌" })
   }
 
