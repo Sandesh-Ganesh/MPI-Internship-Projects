@@ -1,7 +1,7 @@
 import Domain from "../models/Domain.js";
 import { fetchDnsFromCloudflare } from "./cloudflareService.js";
 
-export const getDnsRecords = async({ domainId, type, page=1, limit=100, format=true }) => {
+export const getDnsRecords = async({ domainId, type, page=1, limit=100, format=false }) => {
 
   if (!domainId) {
     throw new Error("domain Id is required");

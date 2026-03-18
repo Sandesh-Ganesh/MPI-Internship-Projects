@@ -23,17 +23,17 @@ const DNSRecord = sequelize.define(
       allowNull:false,
       unique:true
     },
-
-    record_type:{
-      type:DataTypes.STRING,
-      allowNull:false
-    },
-
+    
     dns_name:{
       type:DataTypes.STRING,
       allowNull:false
     },
 
+    record_type:{
+      type:DataTypes.STRING,
+      allowNull:false
+    },
+    
     record_value:{
       type:DataTypes.STRING,
       allowNull:false
