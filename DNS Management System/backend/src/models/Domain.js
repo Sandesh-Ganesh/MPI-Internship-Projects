@@ -19,6 +19,11 @@ const Domain = sequelize.define(
         type: DataTypes.STRING,
         allowNull: true
     },
+    //Add Api token 
+    api_token:{
+       type: DataTypes.STRING,
+       allowNull: true
+    },
     
     company_id: {
       type: DataTypes.INTEGER,
