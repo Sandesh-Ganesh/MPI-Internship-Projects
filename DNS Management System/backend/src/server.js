@@ -10,7 +10,7 @@ import controlPanelRoutes from './routes/controlPanelRoutes.js'
 import costCenterRoutes from './routes/costCenterRoutes.js';
 import domainRoutes from './routes/domainRoutes.js'
 import "./cron/dnsSyncJob.js"
-import dnsRecordRoutes from './routes/dnsRoutes.js'
+import dnsRoutes from './routes/dnsRoutes.js'
 dotenv.config();
 
 const app=express();
@@ -38,7 +38,7 @@ app.use("/api/costCenters",costCenterRoutes)
 
 app.use("/api/domains",domainRoutes)
 
-app.use("/api/records",dnsRecordRoutes)
+app.use("/api/records",dnsRoutes)
 
 const startServer = async () => {
   await connectDB();

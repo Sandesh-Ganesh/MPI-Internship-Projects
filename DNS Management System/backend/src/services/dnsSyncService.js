@@ -1,31 +1,38 @@
-import DNSRecord from "../models/DNSRecord.js"
-import Domain from "../models/Domain.js"
-import { fetchCloudflareDNSRecords } from "./cloudflareService.js"
+import DNSRecord from "../models/DNSRecord.js";
+import { getDnsRecords } from "./dnsService.js";
 
-export const syncDNSRecords = async () => {
+export const syncDnsRecords = async (domainId) => {
 
-  const domains = await Domain.findAll()
+  const externalRecords = await getDnsRecords({
+    domainId,
+    format: false
+  });
 
-  for(const domain of domains){
+  const results = [];
 
-    if(!domain.zone_id) continue
+  for (const record of externalRecords) {
 
-    const records = await fetchCloudflareDNSRecords(domain.zone_id)
+    const existing = await DNSRecord.findOne({
+      where: { external_id: record.id }
+    });
 
-    for(const record of records){
-      // upsert means - insert if not exists, update if exists 
-      await DNSRecord.upsert({
-        domain_id: domain.domain_id,
-        provider_record_id: record.id,
-        record_type: record.type,
-        dns_name: record.name,
-        record_value: record.content,
-        ttl: record.ttl,
-        proxied: record.proxied
-      })
+    const data = {
+      external_id: record.id,
+      domain_id: domainId,
+      type: record.type,
+      name: record.name,
+      value: record.content,
+      ttl: record.ttl,
+    };
 
+    if (existing) {
+      await existing.update(data);
+      results.push({ status: "updated", id: existing.id });
+    } else {
+      const newRecord = await DNSRecord.create(data);
+      results.push({ status: "created", id: newRecord.id });
     }
-
   }
 
+  return results;
 };

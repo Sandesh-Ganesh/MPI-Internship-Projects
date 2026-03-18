@@ -1,57 +1,45 @@
-import getExternalDnsRecords  from '../services/cloudflareService.js';
+// import getExternalDnsRecords  from '../services/cloudflareService.js';
 import DNSRecord from "../models/DNSRecord.js"
-
-export const getDnsRecordsByDomain = async (req,res)=>{
-  try{
-
-    const {domain_id} = req.params
-
-    const records = await DNSRecord.findAll({
-      where:{domain_id}
-    })
-
-    res.json(records)
-
-  }catch(error){
-
-    res.status(500).json({
-      message:error.message
-    })
-
-  }
-};
+import { getDnsRecords } from '../services/dnsService.js';
 
 export const fetchDnsRecords = async (req, res) => {
   try {
-    const { type, page = 1, limit = 10 } = req.query;
+    const { domainId } =  req.params
+    const { type, page = 1, limit = 10 } = req.query
 
-    let data = await getExternalDnsRecords({
+    let data = await getDnsRecords({
+      domainId,
       type,
       page:Number(page),
       limit:Number(limit)
-    });
+    })
+
     if(data.length > 0){
-      res.json(data);
+     return  res.status(200).json(data)
     }else{
-      res.status(400).send("DNS Record with given type does not exist OR Invalid DNS Record type");
+      return res.status(400).json(
+        {
+          message:"DNS Record with given type does not exist OR Invalid DNS Record type"
+        });
     }
-    
-    console.log("Fetched DNS records successfully");
   } catch (error) {
-    console.error(error.response?.data || error.message);
-    res.status(500).json({ error: "Failed to fetch DNS records" });
-    console.error("REAL ERROR:", error.response?.data || error.message);
-    throw error; 
+    // console.error(error.response?.data || error.message);
+    res.status(500).json(
+      {message:error}//, error: "Failed to fetch DNS records" }
+    );
+    // console.error("REAL ERROR:", error.response?.data || error.message);
+    // throw error; 
   }
 };
-
+/*
+// Get DNS from DB
 export const getDNSRecordsByDomain = async(req,res)=>{
   try{
 
-    const {domain_id} = req.params
+    const {domainId} = req.params
 
     const records = await DNSRecord.findAll({
-      where:{domain_id}
+      where:{domain_id: domainId}
     })
 
     return res.status(200).json(records)
@@ -62,3 +50,4 @@ export const getDNSRecordsByDomain = async(req,res)=>{
     })
   }
 }
+*/
