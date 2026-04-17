@@ -6,7 +6,6 @@ import {
   getSSLCertificateById,
   updateSSLCertificate,
   deleteSSLCertificate,
-  renewSSLCertificate
 } from "../controllers/SSLCertificateController.js"
 
 import { authenticateToken } from "../middleware/authMiddleware.js"
@@ -26,7 +25,7 @@ router.put("/ssl-certificates/:id", allowRoles("ADMIN"), updateSSLCertificate)
 
 router.patch("/ssl-certificates/:id", allowRoles("ADMIN"), deleteSSLCertificate)
 
-// 🔥 renewal
-router.post("/ssl-certificates/:id/renew", allowRoles("ADMIN"), renewSSLCertificate)
+// renewal
+// router.post("/ssl-certificates/:id/renew", allowRoles("ADMIN"), renewSSLCertificate)
 
 export default router
