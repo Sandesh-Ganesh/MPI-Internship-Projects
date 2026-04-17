@@ -1,4 +1,5 @@
 import Domain from "../models/Domain.js"
+import ActivityLog from "../models/ActivityLog.js"
 
 export const createDomain = async (req,res)=>{
   try{
@@ -47,6 +48,15 @@ export const createDomain = async (req,res)=>{
       expiry_date,
       remarks,
       status
+    })
+    
+    //Log in Actity Log Table
+    await ActivityLog.create({
+      log_type: "DOMAIN",
+      entity_id: domain.domain_id,
+      user_id: req.user.id,
+      action: "CREATE",
+      new_value: domain
     })
 
     return res.status(201).json({
@@ -110,7 +120,18 @@ export const updateDomain = async (req,res)=>{
       })
     }
 
+    const oldData = domain.toJSON()
+
     await domain.update(req.body)
+
+    await ActivityLog.create({
+      log_type: "DOMAIN",
+      entity_id: domain.domain_id,
+      user_id: req.user.id,
+      action: "UPDATE",
+      old_value: oldData,
+      new_value: domain
+    })
 
     return res.status(200).json({
       message:"Domain updated successfully",
@@ -137,8 +158,19 @@ export const deleteDomain = async (req,res)=>{
       })
     }
 
+    const oldData = domain.toJSON()
+
     await domain.update({
       status:"INACTIVE"
+    })
+
+    await ActivityLog.create({
+      log_type: "DOMAIN",
+      entity_id: domain.domain_id,
+      user_id: req.user.id,
+      action: "DELETE",
+      old_value: oldData,
+      new_value: domain
     })
 
     return res.status(200).json({
