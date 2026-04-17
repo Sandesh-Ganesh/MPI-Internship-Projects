@@ -1,213 +1,176 @@
 import SSLCertificate from "../models/SSLCertificate.js"
-import Domain from "../models/Domain.js"
+import ActivityLog from "../models/ActivityLog.js"
 
-//Create SSL Certificate + attach domains
 
+// CREATE SSL (with renewal handling)
 export const createSSLCertificate = async (req, res) => {
   try {
-    const {
-      ssl_name,
-      cert_type,
-      validation_type,
-      encryption_type,
-      registered_date,
-      expiry_date,
-      vendor_id,
-      control_panel_id,
-      requested_by,
-      approved_by,
-      remarks,
-      status,
-      domain_ids // array of domain IDs
-    } = req.body
 
-    const ssl = await SSLCertificate.create({
-      ssl_name,
-      cert_type,
-      validation_type,
-      encryption_type,
-      registered_date,
-      expiry_date,
-      vendor_id,
-      control_panel_id,
-      requested_by,
-      approved_by,
-      remarks,
-      status
+    const data = req.body
+
+    // find existing active SSL for this domain
+    const oldSSL = await SSLCertificate.findOne({
+      where: {
+        domain_id: data.domain_id,
+        status: "ACTIVE"
+      }
     })
 
-    // 🔗 Attach domains (many-to-many)
-    if (domain_ids && domain_ids.length > 0) {
-      const domains = await Domain.findAll({
-        where: { id: domain_ids }
-      })
-
-      await ssl.setDomains(domains)
+    // deactivate old SSL if exists
+    if (oldSSL) {
+      await oldSSL.update({ status: "INACTIVE" })
     }
+
+    // create new SSL with parent link
+    const newSSL = await SSLCertificate.create({
+      ...data,
+      parent_ssl_id: oldSSL ? oldSSL.ssl_id : null
+    })
+
+    // Activity Log
+    await ActivityLog.create({
+      log_type: "SSL",
+      entity_id: newSSL.ssl_id,
+      user_id: req.user?.id,
+      action: "CREATE",
+      old_value: oldSSL ? oldSSL.toJSON() : null,
+      new_value: newSSL.toJSON()
+    })
 
     return res.status(201).json({
-      success: true,
-      message: "SSL Certificate created successfully",
-      data: ssl
+      message: "SSL created successfully",
+      data: newSSL
     })
+
   } catch (error) {
     return res.status(500).json({
-      success: false,
       message: error.message
     })
   }
 }
 
-//Get all SSL Certificates (with domains)
+
+
+// GET ALL SSL CERTIFICATES
 export const getAllSSLCertificates = async (req, res) => {
   try {
-    const sslCertificates = await SSLCertificate.findAll({
-      include: [
-        {
-          model: Domain,
-          as: "domains",
-          attributes: ["id", "name"]
-        }
-      ],
-      order: [["createdAt", "DESC"]]
-    })
 
-    return res.status(200).json({
-      success: true,
-      data: sslCertificates
-    })
+    const data = await SSLCertificate.findAll()
+
+    return res.status(200).json(data)
+
   } catch (error) {
     return res.status(500).json({
-      success: false,
       message: error.message
     })
   }
 }
 
-// Get single SSL Certificate
 
+
+// GET SSL BY ID
 export const getSSLCertificateById = async (req, res) => {
   try {
+
     const { id } = req.params
 
-    const ssl = await SSLCertificate.findByPk(id, {
-      include: [
-        {
-          model: Domain,
-          as: "domains",
-          attributes: ["id", "name"]
-        }
-      ]
-    })
+    const ssl = await SSLCertificate.findByPk(id)
 
     if (!ssl) {
       return res.status(404).json({
-        success: false,
-        message: "SSL Certificate not found"
+        message: "SSL not found"
       })
     }
 
-    return res.status(200).json({
-      success: true,
-      data: ssl
-    })
+    return res.status(200).json(ssl)
+
   } catch (error) {
     return res.status(500).json({
-      success: false,
       message: error.message
     })
   }
 }
 
-//Update SSL Certificate + domains
+
+
+// UPDATE SSL
 export const updateSSLCertificate = async (req, res) => {
   try {
+
     const { id } = req.params
-    const {
-      ssl_name,
-      cert_type,
-      validation_type,
-      encryption_type,
-      registered_date,
-      expiry_date,
-      vendor_id,
-      control_panel_id,
-      requested_by,
-      approved_by,
-      remarks,
-      status,
-      domain_ids
-    } = req.body
+    const updates = req.body
 
     const ssl = await SSLCertificate.findByPk(id)
 
     if (!ssl) {
       return res.status(404).json({
-        success: false,
-        message: "SSL Certificate not found"
+        message: "SSL not found"
       })
     }
 
-    await ssl.update({
-      ssl_name,
-      cert_type,
-      validation_type,
-      encryption_type,
-      registered_date,
-      expiry_date,
-      vendor_id,
-      control_panel_id,
-      requested_by,
-      approved_by,
-      remarks,
-      status
+    const oldData = ssl.toJSON()
+
+    await ssl.update(updates)
+
+    // Activity Log
+    await ActivityLog.create({
+      log_type: "SSL",
+      entity_id: ssl.ssl_id,
+      user_id: req.user?.id,
+      action: "UPDATE",
+      old_value: oldData,
+      new_value: ssl.toJSON()
     })
-
-    // Update domain mapping
-    if (domain_ids) {
-      const domains = await Domain.findAll({
-        where: { id: domain_ids }
-      })
-
-      await ssl.setDomains(domains)
-    }
 
     return res.status(200).json({
-      success: true,
-      message: "SSL Certificate updated successfully",
+      message: "SSL updated successfully",
       data: ssl
     })
+
   } catch (error) {
     return res.status(500).json({
-      success: false,
       message: error.message
     })
   }
 }
 
-// Delete SSL Certificate
+
+
+// SOFT DELETE SSL
 export const deleteSSLCertificate = async (req, res) => {
   try {
+
     const { id } = req.params
 
     const ssl = await SSLCertificate.findByPk(id)
 
     if (!ssl) {
       return res.status(404).json({
-        success: false,
-        message: "SSL Certificate not found"
+        message: "SSL not found"
       })
     }
 
-    await ssl.destroy()
+    const oldData = ssl.toJSON()
+
+    await ssl.update({
+      status: "INACTIVE"
+    })
+
+    // 📝 Activity Log
+    await ActivityLog.create({
+      log_type: "SSL",
+      entity_id: ssl.ssl_id,
+      user_id: req.user?.id,
+      action: "DELETE",
+      old_value: oldData
+    })
 
     return res.status(200).json({
-      success: true,
-      message: "SSL Certificate deleted successfully"
+      message: "SSL deactivated successfully"
     })
+
   } catch (error) {
     return res.status(500).json({
-      success: false,
       message: error.message
     })
   }

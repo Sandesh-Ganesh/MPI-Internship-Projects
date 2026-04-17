@@ -11,6 +11,7 @@ import costCenterRoutes from './routes/costCenterRoutes.js';
 import domainRoutes from './routes/domainRoutes.js'
 import "./cron/dnsSyncJob.js"
 import dnsRoutes from './routes/dnsRoutes.js'
+import activityLogRoutes from './routes/activityLogRoutes.js'
 import SSLCerticateRoutes from './routes/SSLCertificateRoutes.js'
 dotenv.config();
 
@@ -41,6 +42,7 @@ app.use("/api/domains",domainRoutes)
 
 app.use("/api/records",dnsRoutes)
 
+app.use("/api/activity-logs",activityLogRoutes)
 app.use("/api",SSLCerticateRoutes)
 
 const startServer = async () => {
