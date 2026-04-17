@@ -14,6 +14,12 @@ const SSLCertificate = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false
     },
+    
+    // link renewals together
+    parent_ssl_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
 
     ssl_name: {
       type: DataTypes.STRING,
