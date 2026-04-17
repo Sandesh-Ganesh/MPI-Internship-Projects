@@ -1,6 +1,7 @@
 import DNSRecord from "../models/DNSRecord.js" 
 import { getDnsRecords } from "./dnsService.js" 
 import Domain from "../models/Domain.js" 
+import DNSSyncLog from "../models/DNSSyncLog.js"
 export const syncDnsRecords = async (domainId) => {
 
   const externalRecords = await getDnsRecords({
@@ -58,6 +59,13 @@ export const syncAllDomainsDnsRecords = async () => {
       console.log(`Syncing domain: ${ domain.domain_name} (ID: ${domain.domain_id})`)
 
       const res = await syncDnsRecords(domain.domain_id)
+      
+      // Log
+      await DNSSyncLog.create({
+        domain_id: domain.domain_id,
+        status: "SUCCESS",
+        records_fetched: res.length
+      })
 
       results.push({
         domainId: domain.domain_id,
@@ -68,6 +76,13 @@ export const syncAllDomainsDnsRecords = async () => {
     } catch (error) {
 
       console.error(`Error syncing domain ${domain.id}:`, error.message)
+
+      await DNSSyncLog.create({
+        domain_id: domain.domain_id,
+        status: "FAILED",
+        error_message: error.message
+      })
+
 
       results.push({
         domainId: domain.domain_id,
