@@ -11,6 +11,7 @@ import costCenterRoutes from './routes/costCenterRoutes.js';
 import domainRoutes from './routes/domainRoutes.js'
 import "./cron/dnsSyncJob.js"
 import dnsRoutes from './routes/dnsRoutes.js'
+import SSLCerticateRoutes from './routes/SSLCertificateRoutes.js'
 dotenv.config();
 
 const app=express();
@@ -39,6 +40,8 @@ app.use("/api/costCenters",costCenterRoutes)
 app.use("/api/domains",domainRoutes)
 
 app.use("/api/records",dnsRoutes)
+
+app.use("/api",SSLCerticateRoutes)
 
 const startServer = async () => {
   await connectDB();
