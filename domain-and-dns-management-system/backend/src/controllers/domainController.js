@@ -54,7 +54,7 @@ export const createDomain = async (req,res)=>{
     await ActivityLog.create({
       log_type: "DOMAIN",
       entity_id: domain.domain_id,
-      user_id: req.user.id,
+      user_id: req.user.userId,
       action: "CREATE",
       new_value: domain
     })
@@ -127,7 +127,7 @@ export const updateDomain = async (req,res)=>{
     await ActivityLog.create({
       log_type: "DOMAIN",
       entity_id: domain.domain_id,
-      user_id: req.user.id,
+      user_id: req.user.userId,
       action: "UPDATE",
       old_value: oldData,
       new_value: domain
@@ -167,7 +167,7 @@ export const deleteDomain = async (req,res)=>{
     await ActivityLog.create({
       log_type: "DOMAIN",
       entity_id: domain.domain_id,
-      user_id: req.user.id,
+      user_id: req.user.userId,
       action: "DELETE",
       old_value: oldData,
       new_value: domain

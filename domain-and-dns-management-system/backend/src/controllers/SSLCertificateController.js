@@ -26,12 +26,12 @@ export const createSSLCertificate = async (req, res) => {
       ...data,
       parent_ssl_id: oldSSL ? oldSSL.ssl_id : null
     })
-
+    console.log(req.user?.userID)
     // Activity Log
     await ActivityLog.create({
       log_type: "SSL",
       entity_id: newSSL.ssl_id,
-      user_id: req.user?.id,
+      user_id: req.user?.userId,   
       action: "CREATE",
       old_value: oldSSL ? oldSSL.toJSON() : null,
       new_value: newSSL.toJSON()
