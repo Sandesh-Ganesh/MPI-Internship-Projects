@@ -1,4 +1,3 @@
-
 import {useState} from 'react'
 import * as Yup from 'yup'
 import clsx from 'clsx'
@@ -7,6 +6,7 @@ import {useFormik} from 'formik'
 import {getUserByToken, login} from '../core/_requests'
 import {toAbsoluteUrl} from '../../../../_metronic/helpers'
 import {useAuth} from '../core/Auth'
+import {useNavigate} from 'react-router-dom'
 
 const loginSchema = Yup.object().shape({
   email: Yup.string()
@@ -31,9 +31,12 @@ const initialValues = {
   https://medium.com/@maurice.de.beijer/yup-validation-and-typescript-and-formik-6c342578a20e
 */
 
+
+
 export function Login() {
   const [loading, setLoading] = useState(false)
   const {saveAuth, setCurrentUser} = useAuth()
+  const navigate = useNavigate()
 
   const formik = useFormik({
     initialValues,
@@ -41,11 +44,23 @@ export function Login() {
     onSubmit: async (values, {setStatus, setSubmitting}) => {
       setLoading(true)
       try {
-        const {data: auth} = await login(values.email, values.password)
-        saveAuth(auth)
-        const {data: user} = await getUserByToken(auth.api_token)
-        setCurrentUser(user)
-      } catch (error) {
+          const response = await login(values.email, values.password)
+
+          const data = response.data
+
+          //  Save token
+          saveAuth({ api_token: data.token })
+
+          // Save user in context
+          setCurrentUser(data.user)
+
+          // Save user in browser (IMPORTANT)
+          localStorage.setItem('user', JSON.stringify(data.user))
+
+          // Go to dashboard
+          navigate('/dashboard')
+
+        } catch (error) {
         console.error(error)
         saveAuth(undefined)
         setStatus('The login details are incorrect')
