@@ -13,6 +13,7 @@ import "./cron/dnsSyncJob.js"
 import dnsRoutes from './routes/dnsRoutes.js'
 import activityLogRoutes from './routes/activityLogRoutes.js'
 import SSLCerticateRoutes from './routes/SSLCertificateRoutes.js'
+import dnsSyncLogRoutes from './routes/dnsSyncLogRoutes.js'
 dotenv.config();
 
 const app=express();
@@ -43,7 +44,10 @@ app.use("/api/domains",domainRoutes)
 app.use("/api/records",dnsRoutes)
 
 app.use("/api/activity-logs",activityLogRoutes)
+
 app.use("/api",SSLCerticateRoutes)
+
+app.use("/api", dnsSyncLogRoutes)
 
 const startServer = async () => {
   await connectDB();
