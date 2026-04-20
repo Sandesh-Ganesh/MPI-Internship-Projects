@@ -14,6 +14,17 @@ import dnsRoutes from './routes/dnsRoutes.js'
 import activityLogRoutes from './routes/activityLogRoutes.js'
 import SSLCerticateRoutes from './routes/SSLCertificateRoutes.js'
 import dnsSyncLogRoutes from './routes/dnsSyncLogRoutes.js'
+import {
+  Company,
+  CostCenter,
+  Vendor,
+  ControlPanel,
+  Domain,
+  DNSRecord,
+  SSLCertificate,
+  ActivityLog,
+  DNSSyncLog,
+  User} from './models/index.js'
 dotenv.config();
 
 const app=express();
@@ -53,7 +64,7 @@ const startServer = async () => {
   await connectDB();
 
   // IMPORTANT: do NOT use force:true if table already exists
-  await sequelize.sync();
+  await sequelize.sync({alter:true});
 
   console.log("Tables synced ✅");
 

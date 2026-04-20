@@ -1,4 +1,4 @@
-import sequelize from "../config/database.js"
+import { sequelize } from "../config/database.js"
 
 import Company from "./Company.js"
 import CostCenter from "./CostCenter.js"
