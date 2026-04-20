@@ -54,9 +54,6 @@ export function Login() {
           // Save user in context
           setCurrentUser(data.user)
 
-          // Save user in browser (IMPORTANT)
-          localStorage.setItem('user', JSON.stringify(data.user))
-
           // Go to dashboard
           navigate('/dashboard')
 
