@@ -64,7 +64,7 @@ const startServer = async () => {
   await connectDB();
 
   // IMPORTANT: do NOT use force:true if table already exists
-  await sequelize.sync({alter:true});
+  await sequelize.sync();
 
   console.log("Tables synced ✅");
 

@@ -71,7 +71,7 @@ export const login = async (req, res) => {
 
 export const getCurrentUser = async (req, res) => {
   try {
-    const user = await User.findByPk(req.user.user_id)
+    const user = await User.findByPk(req.user.userId)
 
     return res.json(user)
   } catch (error) {
