@@ -69,3 +69,13 @@ export const login = async (req, res) => {
   })
 }
 
+export const getCurrentUser = async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.user_id)
+
+    return res.json(user)
+  } catch (error) {
+    return res.status(500).json({ message: "Error fetching user" })
+  }
+}
+
