@@ -11,7 +11,7 @@ export const signup = async (req, res) => {
       username,
       email,
       password : hashedPassword,
-      role: role || "user",
+      role: role || "USER",
       status: "ACTIVE",
     })
 
