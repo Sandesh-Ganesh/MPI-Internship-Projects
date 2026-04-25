@@ -3,7 +3,6 @@ import {getDomains} from "../api/domainsApi"
 import {PageTitle} from "../../../../_metronic/layout/core"
 import {Content} from "../../../../_metronic/layout/components/content"
 import {ToolbarWrapper} from "../../../../_metronic/layout/components/toolbar"
-import {CreateDomainModal} from "../components/CreateDomainModal"
 import {useNavigate} from "react-router-dom"
 import { DomainsTable } from "../components/DomainsTable"
 

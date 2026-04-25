@@ -1,3 +1,5 @@
+import {useNavigate} from "react-router-dom"
+
 export const DomainsTable = ({domains}: any) => {
 
   const getStatusClass = (status: string) => {
@@ -5,6 +7,8 @@ export const DomainsTable = ({domains}: any) => {
     if (status === "EXPIRED") return "badge-light-danger"
     return "badge-light-warning"
   }
+
+  const navigate = useNavigate()
 
   return (
     <div className="card">
@@ -50,6 +54,12 @@ export const DomainsTable = ({domains}: any) => {
                   </td>
 
                   <td>
+                    <button
+                      className="btn btn-sm btn-light-primary me-2"
+                      onClick={() => navigate(`/domains/edit/${domain.domain_id}`)}
+                    >
+                      Edit
+                    </button>
                     <button className="btn btn-sm btn-light-primary me-2">
                       Renew
                     </button>

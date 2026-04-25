@@ -9,6 +9,7 @@ import {WithChildren} from '../../_metronic/helpers'
 import BuilderPageWrapper from '../pages/layout-builder/BuilderPageWrapper'
 import {DomainsPage} from "../modules/domains/pages/DomainsPage"
 import {CreateDomainPage} from "../modules/domains/pages/CreateDomainPage"
+import { EditDomainPage } from '../modules/domains/pages/EditDomainPage'
 
 const PrivateRoutes = () => {
   const ProfilePage = lazy(() => import('../modules/profile/ProfilePage'))
@@ -27,6 +28,7 @@ const PrivateRoutes = () => {
         <Route path='dashboard' element={<DashboardWrapper />} />
         <Route path='/domains' element={<DomainsPage />} />
         <Route path="/domains/create" element={<CreateDomainPage />} />
+        <Route path="/domains/edit/:id" element={<EditDomainPage />} />
         <Route path='builder' element={<BuilderPageWrapper />} />
         <Route path='menu-test' element={<MenuTestPage />} />
         {/* Lazy Modules */}
