@@ -32,7 +32,7 @@ const SidebarMenuMain = () => {
   {/* For User */}
   {currentUser?.role === 'USER' && (
     <>
-    <SidebarMenuItem to='/domains' title='Domains' hasBullet={false} />
+    <SidebarMenuItem to='/domains' title='Domains' icon="domain"  hasBullet={false} />
     <SidebarMenuItem to='/dns-records' title='DNS Records' hasBullet={false} />
     </>
   )}
