@@ -1,49 +1,47 @@
 export const DomainsTable = ({domains}: any) => {
+
   const getStatusClass = (status: string) => {
     if (status === "ACTIVE") return "badge-light-success"
     if (status === "EXPIRED") return "badge-light-danger"
     return "badge-light-warning"
   }
-  return (
-     <div className="card">
-      <div className="card-header border-0 pt-6">
-        <div className="card-title">
-          {/* Search */}
-          <div className="d-flex align-items-center position-relative my-1">
-            <input
-              type="text"
-              className="form-control form-control-solid w-250px ps-4"
-              placeholder="Search domains"
-            />
-          </div>
-        </div>
 
-        <div className="card-toolbar">
-          <button className="btn btn-primary">
-            + Add Domain
-          </button>
-        </div>
-      </div>
-       <div className="card-body pt-0">
+  return (
+    <div className="card">
+      <div className="card-body pt-0">
         <div className="table-responsive">
           <table className="table align-middle table-row-dashed fs-6 gy-5">
+            
             <thead>
-              <tr className="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
-                <th>Domain</th>
-                <th>Expiry</th>
-                <th>Status</th>
+              <tr className="text-start text-muted fw-bold fs-7 text-uppercase">
+                <th>Domain ID</th>
+                <th>Domain Name</th>
                 <th>Company</th>
+                <th>Cost Centre</th>
                 <th>Vendor</th>
+                <th>Expiry Date</th>
+                <th>Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
 
-            <tbody className="text-gray-600 fw-semibold">
-              {domains.map((domain: any, index: number) => (
-                <tr key={index}>
+            <tbody>
+              {domains.map((domain: any) => (
+                <tr key={domain.domain_id}>
+
+                  <td>{domain.domain_id}</td>
+
                   <td className="fw-bold">{domain.domain_name}</td>
 
-                  <td>{new Date(domain.expiry_date).toLocaleDateString('en-IN')}</td>
+                  <td>{domain.company?.name || "-"}</td>
+
+                  <td>{domain.cost_center?.name || "-"}</td>
+
+                  <td>{domain.vendor?.name || "-"}</td>
+
+                  <td className="text-warning fw-bold">
+                    {new Date(domain.expiry_date).toLocaleDateString("en-IN")}
+                  </td>
 
                   <td>
                     <span className={`badge ${getStatusClass(domain.status)}`}>
@@ -51,19 +49,24 @@ export const DomainsTable = ({domains}: any) => {
                     </span>
                   </td>
 
-                  <td>{domain.company?.name || "-"}</td>
-                  <td>{domain.vendor?.name || "-"}</td>
                   <td>
                     <button className="btn btn-sm btn-light-primary me-2">
-                      Edit
+                      Renew
                     </button>
-                    <button className="btn btn-sm btn-light-danger">
-                      Delete
+
+                    <button className="btn btn-sm btn-light-info me-2">
+                      DNS
+                    </button>
+
+                    <button className="btn btn-sm btn-light-dark">
+                      History
                     </button>
                   </td>
+
                 </tr>
               ))}
             </tbody>
+
           </table>
         </div>
       </div>
