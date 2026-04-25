@@ -3,6 +3,17 @@ import DNSRecord from "../models/DNSRecord.js"
 import { getDnsRecords} from '../services/dnsService.js'
 import { syncAllDomainsDnsRecords, syncDnsRecords } from "../services/dnsSyncService.js"
 
+export const getAllDnsRecords = async (req, res) => {
+  try {
+    const records = await DNSRecord.findAll()
+
+    return res.status(200).json(records)
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    })
+  }
+}
 export const fetchDnsRecords = async (req, res) => {
   try {
     const { domainId } =  req.params
