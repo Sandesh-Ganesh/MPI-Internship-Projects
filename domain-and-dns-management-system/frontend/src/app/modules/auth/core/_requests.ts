@@ -5,7 +5,7 @@ const API_URL = import.meta.env.VITE_APP_API_URL;
 
 export const GET_USER_BY_ACCESSTOKEN_URL = `${API_URL}/auth/me`;
 export const LOGIN_URL = `${API_URL}/auth/login`;
-export const REGISTER_URL = `${API_URL}/auth/register`;
+export const REGISTER_URL = `${API_URL}/auth/signup`;
 export const REQUEST_PASSWORD_URL = `${API_URL}/auth/forgot_password`;
 
 // Server should return AuthModel
@@ -16,21 +16,20 @@ export function login(email: string, password: string) {
   });
 }
 
-// Server should return AuthModel
-export function register(
-  email: string,
-  firstname: string,
-  lastname: string,
-  password: string,
-  password_confirmation: string
-) {
-  return axios.post(REGISTER_URL, {
-    email,
-    first_name: firstname,
-    last_name: lastname,
-    password,
-    password_confirmation,
-  });
+export function register(email: string, username: string, password: string) {
+  return axios({
+    method: 'post',
+    url: REGISTER_URL,
+    data: {
+      email,
+      username,
+      password,
+    },
+    headers: {
+      // explicitly remove auth
+      Authorization: undefined,
+    },
+  })
 }
 
 // Server should return object => { result: boolean } (Is Email in DB)
