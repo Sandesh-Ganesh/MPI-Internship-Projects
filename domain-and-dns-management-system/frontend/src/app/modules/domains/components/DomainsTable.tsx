@@ -34,6 +34,7 @@ export const DomainsTable = ({domains}: any) => {
                 <th>Status</th>
                 <th>Company</th>
                 <th>Vendor</th>
+                <th>Actions</th>
               </tr>
             </thead>
 
@@ -42,7 +43,7 @@ export const DomainsTable = ({domains}: any) => {
                 <tr key={index}>
                   <td className="fw-bold">{domain.domain_name}</td>
 
-                  <td>{domain.expiry_date}</td>
+                  <td>{new Date(domain.expiry_date).toLocaleDateString('en-IN')}</td>
 
                   <td>
                     <span className={`badge ${getStatusClass(domain.status)}`}>
@@ -52,6 +53,14 @@ export const DomainsTable = ({domains}: any) => {
 
                   <td>{domain.company?.name || "-"}</td>
                   <td>{domain.vendor?.name || "-"}</td>
+                  <td>
+                    <button className="btn btn-sm btn-light-primary me-2">
+                      Edit
+                    </button>
+                    <button className="btn btn-sm btn-light-danger">
+                      Delete
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
