@@ -6,3 +6,8 @@ export const getDNSRecords = async () => {
   const response = await axios.get(`${API_URL}/records/dns-records`)
   return response.data
 }
+
+export const getDomains = async () => {
+  const res = await axios.get(`${API_URL}/domains/domains`)
+  return res.data
+}
