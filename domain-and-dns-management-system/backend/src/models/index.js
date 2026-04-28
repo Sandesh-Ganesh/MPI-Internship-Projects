@@ -48,8 +48,8 @@ Domain.belongsTo(Vendor, { foreignKey: "vendor_id" })
 
 
 // Domain → DNS Records
-Domain.hasMany(DNSRecord, { foreignKey: "domain_id" })
-DNSRecord.belongsTo(Domain, { foreignKey: "domain_id" })
+Domain.hasMany(DNSRecord, { foreignKey: "domain_id", as:"dnsRecords" })
+DNSRecord.belongsTo(Domain, { foreignKey: "domain_id",  as:"domain" })
 
 
 // Domain → SSL Certificates

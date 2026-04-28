@@ -1,10 +1,6 @@
 import React from "react"
 
-const DNSRecordsTable = ({ records, domains  }: any) => {
-  const getDomainName = (id: number) => {
-    const d = domains.find((d: any) => d.domain_id === id)
-    return d ? d.domain_name : id
-  }
+const DNSRecordsTable = ({ records }: any) => {
   
   return (
     <div className="card">
@@ -23,9 +19,9 @@ const DNSRecordsTable = ({ records, domains  }: any) => {
           <tbody className="text-gray-600 fw-semibold">
             {records?.length > 0 ? (
               records.map((record: any) => (
-                <tr key={record.record_id}>
+                <tr key={record.dns_id}>
                   <td>{record.dns_id}</td>
-                  <td>{getDomainName(record.domain_id)}</td>
+                  <td>{record.domain?.domain_name}</td>
                   <td>{record.record_type}</td>
                   <td className="text-truncate" style={{ maxWidth: "150px" }}>{record.record_value}</td>
                 </tr>

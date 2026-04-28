@@ -1,11 +1,20 @@
 // import getExternalDnsRecords  from '../services/cloudflareService.js' 
 import DNSRecord from "../models/DNSRecord.js"
+import Domain from "../models/Domain.js"
 import { getDnsRecords} from '../services/dnsService.js'
 import { syncAllDomainsDnsRecords, syncDnsRecords } from "../services/dnsSyncService.js"
 
 export const getAllDnsRecords = async (req, res) => {
   try {
-    const records = await DNSRecord.findAll()
+    const records = await DNSRecord.findAll({
+       include: [
+        {
+          model: Domain,
+          as: "domain",
+          attributes: ["domain_id", "domain_name"],
+        },
+      ],
+  })
 
     return res.status(200).json(records)
   } catch (error) {
