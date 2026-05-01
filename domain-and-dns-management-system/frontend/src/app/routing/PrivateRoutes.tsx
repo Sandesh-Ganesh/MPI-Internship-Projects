@@ -11,6 +11,9 @@ import {DomainsPage} from "../modules/domains/pages/DomainsPage"
 import {CreateDomainPage} from "../modules/domains/pages/CreateDomainPage"
 import { EditDomainPage } from '../modules/domains/pages/EditDomainPage'
 import DNSRecordsPage from '../modules/dnsRecords/pages/DNSRecordsPage'
+import {SSLCertificatesPage} from '../modules/sslCertificates/pages/SSLCertificatesPage'
+import {CreateSSLCertificatePage} from '../modules/sslCertificates/pages/CreateSSLCertificatePage'
+import {EditSSLCertificatePage} from '../modules/sslCertificates/pages/EditSSLCertificatePage'
 
 const PrivateRoutes = () => {
   const ProfilePage = lazy(() => import('../modules/profile/ProfilePage'))
@@ -31,6 +34,9 @@ const PrivateRoutes = () => {
         <Route path="/domains/create" element={<CreateDomainPage />} />
         <Route path="/domains/edit/:id" element={<EditDomainPage />} />
         <Route path="/dns-records" element={<DNSRecordsPage />} />
+        <Route path="/ssl-certificates" element={<SSLCertificatesPage />} />
+        <Route path="/ssl-certificates/create" element={<CreateSSLCertificatePage />} />
+        <Route path="/ssl-certificates/edit/:id" element={<EditSSLCertificatePage />} />
         <Route path='builder' element={<BuilderPageWrapper />} />
         <Route path='menu-test' element={<MenuTestPage />} />
         {/* Lazy Modules */}

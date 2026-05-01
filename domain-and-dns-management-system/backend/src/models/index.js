@@ -56,6 +56,12 @@ DNSRecord.belongsTo(Domain, { foreignKey: "domain_id",  as:"domain" })
 Domain.hasMany(SSLCertificate, { foreignKey: "domain_id" })
 SSLCertificate.belongsTo(Domain, { foreignKey: "domain_id" })
 
+Vendor.hasMany(SSLCertificate, { foreignKey: "vendor_id" })
+SSLCertificate.belongsTo(Vendor, { foreignKey: "vendor_id" })
+
+ControlPanel.hasMany(SSLCertificate, { foreignKey: "control_panel_id" })
+SSLCertificate.belongsTo(ControlPanel, { foreignKey: "control_panel_id" })
+
 
 // SSL self relation (renewal chain)
 SSLCertificate.belongsTo(SSLCertificate, {
