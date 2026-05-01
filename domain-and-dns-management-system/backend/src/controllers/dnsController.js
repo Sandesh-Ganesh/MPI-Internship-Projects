@@ -1,13 +1,53 @@
 // import getExternalDnsRecords  from '../services/cloudflareService.js' 
 import DNSRecord from "../models/DNSRecord.js"
+import Domain from "../models/Domain.js"
 import { getDnsRecords} from '../services/dnsService.js'
 import { syncAllDomainsDnsRecords, syncDnsRecords } from "../services/dnsSyncService.js"
+import { Op } from "sequelize"
 
 export const getAllDnsRecords = async (req, res) => {
   try {
-    const records = await DNSRecord.findAll()
+    const { domainId, type, search, page = 1, limit = 10  } = req.query 
 
-    return res.status(200).json(records)
+    const offset = (Number(page) - 1) * Number(limit)
+
+    const whereClause = {}
+
+    if (domainId) {
+      whereClause.domain_id = domainId
+    }
+
+    if (type) {
+      whereClause.record_type = type
+    }
+
+    if (search) {
+      whereClause[Op.or] = [
+        { dns_name: { [Op.like]: `%${search}%` } },
+        { record_value: { [Op.like]: `%${search}%` } },
+      ]
+    }
+
+    const { rows, count } = await DNSRecord.findAndCountAll({
+      where: whereClause,
+      include: [
+        {
+          model: Domain,
+          as: "domain",
+          attributes: ["domain_id", "domain_name"],
+        },
+      ],
+      limit: Number(limit),
+      offset,
+      order: [["dns_id", "DESC"]], // optional but useful
+    })
+
+    return res.status(200).json({
+      data: rows,
+      total: count,
+      page: Number(page),
+      totalPages: Math.ceil(count / limit),
+    })
   } catch (error) {
     return res.status(500).json({
       message: error.message,

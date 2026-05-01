@@ -27,11 +27,15 @@ const AppRoutes: FC = () => {
         <Route element={<App />}>
           <Route path='error/*' element={<ErrorsPage />} />
           <Route path='logout' element={<Logout />} />
-          { true ? ( //currentUser ? (
+          { currentUser ? (
 
             <>
               <Route path='/*' element={<PrivateRoutes />} />
-              <Route index element={<Navigate to='/dashboard' />} />
+              <Route index element={
+                <PrivateRoute>
+                  <Navigate to='/dashboard' />
+                </PrivateRoute>
+              } />
             </>
           ) : (
             <>
@@ -43,6 +47,17 @@ const AppRoutes: FC = () => {
       </Routes>
     </BrowserRouter>
   )
+}
+
+// Create a wrapper for <Route> that redirects to the login screen if you're not yet authenticated.
+const PrivateRoute = ({children}: any) => {
+  const {auth, currentUser} = useAuth()
+
+  if (!auth?.api_token || !currentUser) {
+    return <Navigate to="/auth/login" />
+  }
+
+  return children
 }
 
 export {AppRoutes}

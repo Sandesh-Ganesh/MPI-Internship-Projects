@@ -9,6 +9,7 @@ import {Link} from 'react-router-dom'
 import {toAbsoluteUrl} from '../../../../_metronic/helpers'
 import {PasswordMeterComponent} from '../../../../_metronic/assets/ts/components'
 import {useAuth} from '../core/Auth'
+import {useNavigate} from 'react-router-dom'
 
 const initialValues = {
   firstname: '',
@@ -48,22 +49,26 @@ const registrationSchema = Yup.object().shape({
 export function Registration() {
   const [loading, setLoading] = useState(false)
   const {saveAuth, setCurrentUser} = useAuth()
+  const navigate = useNavigate()
   const formik = useFormik({
     initialValues,
     validationSchema: registrationSchema,
     onSubmit: async (values, {setStatus, setSubmitting}) => {
       setLoading(true)
       try {
-        const {data: auth} = await register(
-          values.email,
-          values.firstname,
-          values.lastname,
-          values.password,
-          values.changepassword
-        )
-        saveAuth(auth)
-        const {data: user} = await getUserByToken(auth.api_token)
-        setCurrentUser(user)
+        const response = await register(
+        values.email,
+        // we send like username = values.firstname 
+        values.firstname,
+        values.password
+      )
+
+  const data = response.data
+
+  saveAuth({ api_token: data.token })
+  setCurrentUser(data.user)
+
+  navigate('/dashboard')
       } catch (error) {
         console.error(error)
         saveAuth(undefined)
