@@ -1,5 +1,8 @@
 import SSLCertificate from "../models/SSLCertificate.js"
 import ActivityLog from "../models/ActivityLog.js"
+import Domain from "../models/Domain.js"
+import Vendor from "../models/Vendor.js"
+import ControlPanel from "../models/ControlPanel.js"
 
 
 // CREATE SSL (with renewal handling)
@@ -26,12 +29,11 @@ export const createSSLCertificate = async (req, res) => {
       ...data,
       parent_ssl_id: oldSSL ? oldSSL.ssl_id : null
     })
-    console.log(req.user?.userID)
     // Activity Log
     await ActivityLog.create({
       log_type: "SSL",
       entity_id: newSSL.ssl_id,
-      user_id: req.user?.userId,   
+      user_id: req.user?.userID,
       action: "CREATE",
       old_value: oldSSL ? oldSSL.toJSON() : null,
       new_value: newSSL.toJSON()
@@ -55,7 +57,23 @@ export const createSSLCertificate = async (req, res) => {
 export const getAllSSLCertificates = async (req, res) => {
   try {
 
-    const data = await SSLCertificate.findAll()
+    const data = await SSLCertificate.findAll({
+      include: [
+        {
+          model: Domain,
+          attributes: ["domain_id", "domain_name"],
+        },
+        {
+          model: Vendor,
+          attributes: ["vendor_id", "vendor_name"],
+        },
+        {
+          model: ControlPanel,
+          attributes: ["control_panel_id", "panel_name"],
+        },
+      ],
+      order: [["ssl_id", "DESC"]],
+    })
 
     return res.status(200).json(data)
 
@@ -74,7 +92,22 @@ export const getSSLCertificateById = async (req, res) => {
 
     const { id } = req.params
 
-    const ssl = await SSLCertificate.findByPk(id)
+    const ssl = await SSLCertificate.findByPk(id, {
+      include: [
+        {
+          model: Domain,
+          attributes: ["domain_id", "domain_name"],
+        },
+        {
+          model: Vendor,
+          attributes: ["vendor_id", "vendor_name"],
+        },
+        {
+          model: ControlPanel,
+          attributes: ["control_panel_id", "panel_name"],
+        },
+      ],
+    })
 
     if (!ssl) {
       return res.status(404).json({
@@ -116,7 +149,7 @@ export const updateSSLCertificate = async (req, res) => {
     await ActivityLog.create({
       log_type: "SSL",
       entity_id: ssl.ssl_id,
-      user_id: req.user?.id,
+      user_id: req.user?.userID,
       action: "UPDATE",
       old_value: oldData,
       new_value: ssl.toJSON()
@@ -160,7 +193,7 @@ export const deleteSSLCertificate = async (req, res) => {
     await ActivityLog.create({
       log_type: "SSL",
       entity_id: ssl.ssl_id,
-      user_id: req.user?.id,
+      user_id: req.user?.userID,
       action: "DELETE",
       old_value: oldData
     })
