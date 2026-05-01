@@ -21,5 +21,11 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src"],
+  "exclude": [
+    "src/_metronic/partials/widgets",
+    "src/app/modules/widgets",
+    "src/app/modules/profile",
+    "src/app/modules/accounts"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -71,13 +71,9 @@ const startServer = async () => {
 
   console.log("Tables synced ✅");
 
-  app.listen(process.env.PORT, () => {
-    console.log(`Server running on port ${process.env.PORT} 🚀`);
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT} 🚀`);
   });
 };
 
 startServer();
-
-app.listen(PORT,()=>{
-    console.log(`Server is listenig at port number ${PORT}`)
-})
