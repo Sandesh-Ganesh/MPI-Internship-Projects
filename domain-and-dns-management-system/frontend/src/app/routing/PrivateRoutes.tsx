@@ -14,6 +14,7 @@ import DNSRecordsPage from '../modules/dnsRecords/pages/DNSRecordsPage'
 import {SSLCertificatesPage} from '../modules/sslCertificates/pages/SSLCertificatesPage'
 import {CreateSSLCertificatePage} from '../modules/sslCertificates/pages/CreateSSLCertificatePage'
 import {EditSSLCertificatePage} from '../modules/sslCertificates/pages/EditSSLCertificatePage'
+import { DomainViewPage } from '../modules/domains/pages/DomainViewPage'
 
 const PrivateRoutes = () => {
   const WizardsPage = lazy(() => import('../modules/wizards/WizardsPage'))
@@ -29,6 +30,7 @@ const PrivateRoutes = () => {
         <Route path='dashboard' element={<DashboardWrapper />} />
         <Route path='/domains' element={<DomainsPage />} />
         <Route path="/domains/create" element={<CreateDomainPage />} />
+        <Route path="/domains/view/:id" element={<DomainViewPage />} />
         <Route path="/domains/edit/:id" element={<EditDomainPage />} />
         <Route path="/dns-records" element={<DNSRecordsPage />} />
         <Route path="/ssl-certificates" element={<SSLCertificatesPage />} />

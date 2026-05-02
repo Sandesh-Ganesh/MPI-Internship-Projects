@@ -103,7 +103,18 @@ export const getDomainById = async (req,res)=>{
 
     const { id } = req.params
 
-    const domain = await Domain.findByPk(id)
+    const domain = await Domain.findByPk(id,{
+       include: [
+        {
+          model: Company,
+          attributes: ["company_id", "company_name"]
+        },
+        {
+          model: Vendor,
+          attributes: ["vendor_id", "vendor_name"]
+        }
+      ]
+    })
 
     if(!domain){
       return res.status(404).json({
