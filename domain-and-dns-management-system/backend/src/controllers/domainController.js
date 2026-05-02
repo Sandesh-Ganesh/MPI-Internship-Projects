@@ -1,5 +1,7 @@
 import Domain from "../models/Domain.js"
 import ActivityLog from "../models/ActivityLog.js"
+import Company from "../models/Company.js"
+import Vendor from "../models/Vendor.js"
 
 export const createDomain = async (req,res)=>{
   try{
@@ -74,7 +76,18 @@ export const createDomain = async (req,res)=>{
 export const getAllDomains = async (req,res)=>{
   try{
 
-    const domains = await Domain.findAll()
+    const domains = await Domain.findAll({
+      include: [
+        {
+          model: Company,
+          attributes: ["company_id", "company_name"]
+        },
+        {
+          model: Vendor,
+          attributes: ["vendor_id", "vendor_name"]
+        }
+      ]
+    })
 
     return res.status(200).json(domains)
 
