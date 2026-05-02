@@ -4,7 +4,7 @@ import {PageTitle} from "../../../../_metronic/layout/core"
 import {createSSLCertificate} from "../api/sslCertificatesApi"
 import {SSLCertificateForm} from "../components/SSLCertificateForm"
 import {showToast} from "../../../utils/toast"
-
+import { useState } from "react"
 const initialValues = {
   domain_id: "",
   ssl_name: "",
@@ -32,9 +32,12 @@ const normalizePayload = (form: any) => ({
 
 export const CreateSSLCertificatePage = () => {
   const navigate = useNavigate()
+  const [saving, setSaving] = useState(false)
 
   const handleSubmit = async (form: any) => {
     try {
+      setSaving(true)
+
       await createSSLCertificate(normalizePayload(form))
       // ✅ Success toast
       showToast("SSL created successfully", "success")
@@ -47,6 +50,8 @@ export const CreateSSLCertificatePage = () => {
     } catch (error) {
       console.error(error)
       showToast("Failed to update SSL certificate", "error")
+    }finally{
+      setSaving(false)
     }
   }
 
@@ -54,7 +59,12 @@ export const CreateSSLCertificatePage = () => {
     <>
       <PageTitle>Create SSL Certificate</PageTitle>
       <Content>
-        <SSLCertificateForm initialValues={initialValues} onSubmit={handleSubmit} />
+        <SSLCertificateForm 
+          initialValues={initialValues}
+          onSubmit={handleSubmit}
+          mode="edit"
+          loading={saving}
+        />
       </Content>
     </>
   )

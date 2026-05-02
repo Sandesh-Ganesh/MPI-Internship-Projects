@@ -5,7 +5,8 @@ import {getControlPanels, getDomains, getVendors} from "../api/sslCertificatesAp
 export const SSLCertificateForm = ({
   initialValues,
   onSubmit,
-  mode="edit"
+  mode="edit",
+  loading=false
   }: any) => {
   const [form, setForm] = useState(initialValues)
   const [domains, setDomains] = useState<any[]>([])
@@ -43,7 +44,7 @@ export const SSLCertificateForm = ({
   const handleChange = (e: any) => {
     setForm({...form, [e.target.name]: e.target.value})
   }
-
+  console.log("loading:", loading)
   return (
     <div className="card p-5">
       {loadingDropdowns && <div className="mb-5 text-muted">Loading dropdowns...</div>}
@@ -185,8 +186,19 @@ export const SSLCertificateForm = ({
         </button>
       )}
       {!isView && (
-        <button className="btn btn-primary" onClick={() => onSubmit(form)}>
-          Save
+        <button
+          className="btn btn-primary"
+          onClick={() => onSubmit(form)}
+          disabled={loading}
+        >
+          {loading ? (
+            <>
+              <span className="spinner-border spinner-border-sm me-2"></span>
+              Saving...
+            </>
+          ) : (
+            "Save"
+          )}
         </button>
       )}
     </div>

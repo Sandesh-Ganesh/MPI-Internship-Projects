@@ -24,6 +24,7 @@ export const EditSSLCertificatePage = () => {
   const navigate = useNavigate()
   const [form, setForm] = useState<any>(null)
   const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
 
   useEffect(() => {
     const fetchCertificate = async () => {
@@ -53,21 +54,25 @@ export const EditSSLCertificatePage = () => {
 
   const handleSubmit = async (formData: any) => {
     try {
+      setSaving(true)
+
       await updateSSLCertificate(id!, formData)
 
-      // ✅ Success toast
+      //  Success toast
       showToast("SSL updated successfully", "success")
 
       // Navigate after short delay (optional)
       setTimeout(() => {
         navigate(`/ssl-certificates/${id}`)
-      }, 1000)
+      }, 800)
 
     } catch (error) {
       console.error(error)
 
       // Error toast
       showToast("Failed to update SSL certificate", "error")
+    }finally{
+      setSaving(false)
     }
   }
 
@@ -81,6 +86,7 @@ export const EditSSLCertificatePage = () => {
         initialValues={form} 
         onSubmit={handleSubmit}
         mode="edit" 
+        loading={saving}
         />
       </Content>
     </>
