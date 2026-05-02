@@ -1,5 +1,3 @@
-import React from "react"
-
 const DNSRecordsTable = ({ records }: any) => {
   
   return (
@@ -11,8 +9,12 @@ const DNSRecordsTable = ({ records }: any) => {
             <tr className="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
               <th>ID</th>
               <th>Domain</th>
+              <th>Name</th>
               <th>Type</th>
               <th>Value</th>
+              <th>TTL</th>
+              <th>Proxy</th>
+              <th>Status</th>
             </tr>
           </thead>
 
@@ -22,13 +24,21 @@ const DNSRecordsTable = ({ records }: any) => {
                 <tr key={record.dns_id}>
                   <td>{record.dns_id}</td>
                   <td>{record.domain?.domain_name}</td>
+                  <td>{record.dns_name}</td>
                   <td>{record.record_type}</td>
                   <td className="text-truncate" style={{ maxWidth: "150px" }}>{record.record_value}</td>
+                  <td>{record.ttl || "-"}</td>
+                  <td>{record.proxied ? "Yes" : "No"}</td>
+                  <td>
+                    <span className={`badge ${record.status === "ACTIVE" ? "badge-light-success" : "badge-light-danger"}`}>
+                      {record.status}
+                    </span>
+                  </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan={6} className="text-center">
+                <td colSpan={8} className="text-center">
                   No records found
                 </td>
               </tr>

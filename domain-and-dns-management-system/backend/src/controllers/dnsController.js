@@ -3,10 +3,11 @@ import DNSRecord from "../models/DNSRecord.js"
 import Domain from "../models/Domain.js"
 import { getDnsRecords} from '../services/dnsService.js'
 import { syncAllDomainsDnsRecords, syncDnsRecords } from "../services/dnsSyncService.js"
+import { Op } from "sequelize"
 
 export const getAllDnsRecords = async (req, res) => {
   try {
-    const { domainId, page = 1, limit = 10  } = req.query 
+    const { domainId, type, search, page = 1, limit = 10  } = req.query 
 
     const offset = (Number(page) - 1) * Number(limit)
 
@@ -14,6 +15,17 @@ export const getAllDnsRecords = async (req, res) => {
 
     if (domainId) {
       whereClause.domain_id = domainId
+    }
+
+    if (type) {
+      whereClause.record_type = type
+    }
+
+    if (search) {
+      whereClause[Op.or] = [
+        { dns_name: { [Op.like]: `%${search}%` } },
+        { record_value: { [Op.like]: `%${search}%` } },
+      ]
     }
 
     const { rows, count } = await DNSRecord.findAndCountAll({

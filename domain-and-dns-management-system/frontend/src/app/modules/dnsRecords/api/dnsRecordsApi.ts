@@ -4,10 +4,18 @@ const API_URL = import.meta.env.VITE_APP_API_URL
 
 export const getDNSRecords = async ( domainId?: string,
   page: number = 1,
-  limit: number = 10) => {
+  limit: number = 10,
+  type: string = "",
+  search: string = "") => {
   let url = `${API_URL}/records/dns-records?page=${page}&limit=${limit}`
   if (domainId) { 
     url += `&domainId=${domainId}`
+  }
+  if (type) {
+    url += `&type=${type}`
+  }
+  if (search) {
+    url += `&search=${encodeURIComponent(search)}`
   }
   const res= await axios.get(url)
   return res.data

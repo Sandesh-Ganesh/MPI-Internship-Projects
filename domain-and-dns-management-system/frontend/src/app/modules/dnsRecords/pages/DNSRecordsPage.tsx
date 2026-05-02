@@ -16,12 +16,16 @@ const DNSRecordsPage = () => {
   const [totalPages, setTotalPages] = useState(1)
   const [syncing, setSyncing] = useState(false)
   const [syncingDomain, setSyncingDomain] = useState(false)
+  const [recordType, setRecordType] = useState("")
+  const [search, setSearch] = useState("")
+  const [message, setMessage] = useState("")
 
-  const fetchRecords = async (domainId = "", pageNumber = 1) => {
+  const fetchRecords = async (domainId = selectedDomain, pageNumber = 1, type = recordType, searchText = search) => {
     try {
       setLoading(true)
+      setMessage("")
 
-      const res = await getDNSRecords(domainId, pageNumber)
+      const res = await getDNSRecords(domainId, pageNumber, 10, type, searchText)
 
       setRecords(res.data)
       setTotalPages(res.totalPages)
@@ -50,7 +54,17 @@ const DNSRecordsPage = () => {
   const handleDomainChange = (e: any) => {
     const value = e.target.value
     setSelectedDomain(value)
-    fetchRecords(value,1)   
+    fetchRecords(value, 1)   
+  }
+
+  const handleTypeChange = (e: any) => {
+    const value = e.target.value
+    setRecordType(value)
+    fetchRecords(selectedDomain, 1, value, search)
+  }
+
+  const handleSearch = () => {
+    fetchRecords(selectedDomain, 1, recordType, search)
   }
 
   const handleSyncAll = async () => {
@@ -59,11 +73,11 @@ const DNSRecordsPage = () => {
 
       await syncAllDomains()
 
-      alert("Sync started successfully") // simple for now
+      setMessage("Sync all started successfully.")
 
     } catch (error) {
       console.error(error)
-      alert("Sync failed")
+      setMessage("Sync failed. Please check backend logs.")
     } finally {
       setSyncing(false)
     }
@@ -76,7 +90,7 @@ const DNSRecordsPage = () => {
 
     await syncDomain(Number(selectedDomain))
 
-    alert("Domain sync started")
+    setMessage("Domain sync started.")
 
     // refresh after small delay (since backend is async)
     setTimeout(() => {
@@ -85,7 +99,7 @@ const DNSRecordsPage = () => {
 
   } catch (error) {
     console.error(error)
-    alert("Sync failed")
+    setMessage("Sync failed. Please check backend logs.")
   } finally {
     setSyncingDomain(false)
   }
@@ -98,6 +112,12 @@ const DNSRecordsPage = () => {
       <ToolbarWrapper />
 
       <Content>
+        {message && (
+          <div className="alert alert-info d-flex align-items-center mb-5">
+            <span>{message}</span>
+          </div>
+        )}
+
         <div className="mb-5 d-flex justify-content-end">
           <button
             className="btn btn-primary"
@@ -108,7 +128,7 @@ const DNSRecordsPage = () => {
           </button>
         </div>
         {/* FILTER */}
-        <div className="mb-5 d-flex align-items-center gap-3">
+        <div className="mb-5 d-flex flex-wrap align-items-center gap-3">
           <select
             className="form-select"
             style={{ maxWidth: "300px" }}
@@ -122,6 +142,36 @@ const DNSRecordsPage = () => {
               </option>
             ))}
           </select>
+
+          <select
+            className="form-select"
+            style={{ maxWidth: "160px" }}
+            value={recordType}
+            onChange={handleTypeChange}
+          >
+            <option value="">All Types</option>
+            <option value="A">A</option>
+            <option value="AAAA">AAAA</option>
+            <option value="CNAME">CNAME</option>
+            <option value="MX">MX</option>
+            <option value="TXT">TXT</option>
+            <option value="NS">NS</option>
+          </select>
+
+          <input
+            className="form-control"
+            style={{ maxWidth: "260px" }}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleSearch()
+            }}
+            placeholder="Search DNS name or value"
+          />
+
+          <button className="btn btn-light" onClick={handleSearch}>
+            Search
+          </button>
 
           <button
             className="btn btn-light-primary"
