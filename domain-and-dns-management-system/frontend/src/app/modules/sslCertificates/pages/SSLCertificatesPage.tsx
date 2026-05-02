@@ -5,12 +5,13 @@ import {ToolbarWrapper} from "../../../../_metronic/layout/components/toolbar"
 import {PageTitle} from "../../../../_metronic/layout/core"
 import {deactivateSSLCertificate, getSSLCertificates} from "../api/sslCertificatesApi"
 import {SSLCertificatesTable} from "../components/SSLCertificatesTable"
+import {SSLCertificatesList} from "../components/SSLCertificatesList"
 
 export const SSLCertificatesPage = () => {
   const [certificates, setCertificates] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
-  const [status, setStatus] = useState("")
+  const [status, setStatus] = useState("ACTIVE")
   const [message, setMessage] = useState("")
   const navigate = useNavigate()
 
@@ -25,6 +26,10 @@ export const SSLCertificatesPage = () => {
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleEdit = (id: number) => {
+    navigate(`/ssl-certificates/${id}/edit`)
   }
 
   useEffect(() => {
@@ -62,6 +67,15 @@ export const SSLCertificatesPage = () => {
     }
   }
 
+  const handleViewTimeline = (id: number) => {
+    navigate(`/ssl-certificates/${id}/timeline`)
+  }
+
+  const handleView = (id: number) => {
+    navigate(`/ssl-certificates/${id}`)
+  }
+
+
   return (
     <>
       <PageTitle breadcrumbs={[]}>SSL Certificates</PageTitle>
@@ -69,7 +83,8 @@ export const SSLCertificatesPage = () => {
 
       <Content>
         {message && <div className="alert alert-info mb-5">{message}</div>}
-
+        
+        {/* Header */}
         <div className="d-flex justify-content-between align-items-center mb-5">
           <h2>SSL Certificate Manager</h2>
           <button className="btn btn-danger" onClick={() => navigate("/ssl-certificates/create")}>
@@ -77,6 +92,7 @@ export const SSLCertificatesPage = () => {
           </button>
         </div>
 
+        {/* Filters */}
         <div className="card mb-5">
           <div className="card-body d-flex flex-wrap gap-3">
             <input
@@ -92,8 +108,8 @@ export const SSLCertificatesPage = () => {
               value={status}
               onChange={(e) => setStatus(e.target.value)}
             >
-              <option value="">All Status</option>
               <option value="ACTIVE">ACTIVE</option>
+              <option value="">ALL</option>
               <option value="EXPIRED">EXPIRED</option>
               <option value="INACTIVE">INACTIVE</option>
             </select>
@@ -109,10 +125,13 @@ export const SSLCertificatesPage = () => {
           </div>
         </div>
 
+        {/* Table */}
         {loading ? (
           <div>Loading...</div>
         ) : (
-          <SSLCertificatesTable certificates={filteredCertificates} onDeactivate={handleDeactivate} />
+          <div className="card-body pt-2">
+          <SSLCertificatesList certificates={filteredCertificates} onDeactivate={handleDeactivate} onViewTimeline={handleViewTimeline}  onEdit={handleEdit} onView={handleView} />
+          </div>
         )}
       </Content>
     </>

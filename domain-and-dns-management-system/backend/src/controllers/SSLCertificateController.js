@@ -172,6 +172,8 @@ export const getSSLCertificateById = async (req, res) => {
 // UPDATE SSL
 export const updateSSLCertificate = async (req, res) => {
   try {
+    const { id } = req.params
+    const updates = req.body
 
     const allowedUpdates = [
       "vendor_id",
@@ -179,10 +181,8 @@ export const updateSSLCertificate = async (req, res) => {
       "approved_by",
       "remarks"
     ]
-    const filteredUpdates = {}
 
-    const { id } = req.params
-    const updates = req.body
+    const filteredUpdates = {}
 
     for (let key of allowedUpdates) {
       if (updates[key] !== undefined) {
@@ -200,9 +200,28 @@ export const updateSSLCertificate = async (req, res) => {
 
     const oldData = ssl.toJSON()
 
+    //  Check if anything actually changed
+    let hasChanges = false
+
+    for (let key of Object.keys(filteredUpdates)) {
+      if (oldData[key] !== filteredUpdates[key]) {
+        hasChanges = true
+        break
+      }
+    }
+
+    // No changes → skip update + log
+    if (!hasChanges) {
+      return res.status(200).json({
+        message: "No changes detected",
+        data: ssl
+      })
+    }
+
+    // Apply update
     await ssl.update(filteredUpdates)
 
-    // Activity Log
+    // Log ONLY if changed
     await ActivityLog.create({
       log_type: "SSL",
       entity_id: ssl.ssl_id,
@@ -302,7 +321,7 @@ export const getSSLCertificateTimeline = async (req, res) => {
           attributes: ["user_id", "username"]
         }
       ],
-      order: [["ssl_id", "ASC"]] // oldest → newest (timeline)
+      order: [["ssl_id", "DESC"]] 
     })
 
     return res.status(200).json(timeline)

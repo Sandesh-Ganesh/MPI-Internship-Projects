@@ -3,6 +3,7 @@ import {Content} from "../../../../_metronic/layout/components/content"
 import {PageTitle} from "../../../../_metronic/layout/core"
 import {createSSLCertificate} from "../api/sslCertificatesApi"
 import {SSLCertificateForm} from "../components/SSLCertificateForm"
+import {showToast} from "../../../utils/toast"
 
 const initialValues = {
   domain_id: "",
@@ -35,9 +36,17 @@ export const CreateSSLCertificatePage = () => {
   const handleSubmit = async (form: any) => {
     try {
       await createSSLCertificate(normalizePayload(form))
-      navigate("/ssl-certificates")
+      // ✅ Success toast
+      showToast("SSL created successfully", "success")
+
+      // Navigate after short delay (optional)
+      setTimeout(() => {
+        navigate(`/ssl-certificates/`)
+      }, 1000)
+  
     } catch (error) {
       console.error(error)
+      showToast("Failed to update SSL certificate", "error")
     }
   }
 

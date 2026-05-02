@@ -4,6 +4,7 @@ import {Content} from "../../../../_metronic/layout/components/content"
 import {PageTitle} from "../../../../_metronic/layout/core"
 import {getSSLCertificateById, updateSSLCertificate} from "../api/sslCertificatesApi"
 import {SSLCertificateForm} from "../components/SSLCertificateForm"
+import { showToast } from "../../../utils/toast"
 
 const normalizeDate = (value?: string) => {
   return value ? value.split("T")[0] : ""
@@ -50,13 +51,23 @@ export const EditSSLCertificatePage = () => {
     fetchCertificate()
   }, [id])
 
-  const handleSubmit = async (updatedForm: any) => {
+  const handleSubmit = async (formData: any) => {
     try {
-      if (!id) return
-      await updateSSLCertificate(id, normalizePayload(updatedForm))
-      navigate("/ssl-certificates")
+      await updateSSLCertificate(id!, formData)
+
+      // ✅ Success toast
+      showToast("SSL updated successfully", "success")
+
+      // Navigate after short delay (optional)
+      setTimeout(() => {
+        navigate(`/ssl-certificates/${id}`)
+      }, 1000)
+
     } catch (error) {
       console.error(error)
+
+      // Error toast
+      showToast("Failed to update SSL certificate", "error")
     }
   }
 
@@ -66,7 +77,11 @@ export const EditSSLCertificatePage = () => {
     <>
       <PageTitle>Edit SSL Certificate</PageTitle>
       <Content>
-        <SSLCertificateForm initialValues={form} onSubmit={handleSubmit} />
+        <SSLCertificateForm 
+        initialValues={form} 
+        onSubmit={handleSubmit}
+        mode="edit" 
+        />
       </Content>
     </>
   )
