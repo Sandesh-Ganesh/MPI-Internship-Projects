@@ -11,6 +11,7 @@ export const DomainViewPage = () => {
   const navigate = useNavigate()
 
   const [domain, setDomain] = useState<any>(null)
+  const [ssl, setSSL] = useState<any>(null)
 
   const fetchDomain = async () => {
     try {
@@ -21,8 +22,20 @@ export const DomainViewPage = () => {
     }
   }
 
+  const fetchSSL = async () => {
+    try {
+      const res = await axios.get(
+        `${API_URL}/ssl-certificates/domain/${id}/active`
+      )
+      setSSL(res.data)
+    } catch (err) {
+      console.error("No SSL found")
+    }
+  }
+
   useEffect(() => {
     fetchDomain()
+    fetchSSL()
   }, [])
 
   if (!domain) return <p>Loading...</p>
@@ -124,6 +137,56 @@ export const DomainViewPage = () => {
           </div>
         </div>
 
+        <div className="card p-5 mb-5">
+          <h4 className="mb-4">Active SSL Certificate</h4>
+
+          {!ssl ? (
+            <div className="text-muted">No active SSL found</div>
+          ) : (
+            <div className="d-flex justify-content-between align-items-center">
+
+              {/* LEFT */}
+              <div>
+                <div className="fw-bold fs-5">{ssl.ssl_name}</div>
+                <div className="text-muted fs-7">
+                  {ssl.cert_type} • {ssl.validation_type}
+                </div>
+              </div>
+
+              {/* MIDDLE */}
+              <div>
+                <div className="fw-bold text-warning">
+                  {new Date(ssl.expiry_date).toLocaleDateString("en-IN")}
+                </div>
+                <div className="text-muted fs-7">Expiry</div>
+              </div>
+
+              {/* RIGHT */}
+              <div className="d-flex gap-3">
+
+                <button
+                  className="btn btn-light-primary btn-sm"
+                  onClick={() =>
+                    navigate(`/ssl-certificates/${ssl.ssl_id}`)
+                  }
+                >
+                  View
+                </button>
+
+                <button
+                  className="btn btn-light btn-sm"
+                  onClick={() =>
+                    navigate(`/ssl-certificates/${ssl.ssl_id}/edit`)
+                  }
+                >
+                  Edit
+                </button>
+
+              </div>
+
+            </div>
+          )}
+        </div>
       </Content>
     </>
   )
