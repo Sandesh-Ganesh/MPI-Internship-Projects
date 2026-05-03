@@ -4,6 +4,7 @@ import Domain from "../models/Domain.js"
 import Vendor from "../models/Vendor.js"
 import ControlPanel from "../models/ControlPanel.js"
 import User from "../models/User.js"
+import { sequelize } from "../config/database.js"
 
 // CREATE SSL (with renewal handling)
 export const createSSLCertificate = async (req, res) => {
@@ -190,6 +191,7 @@ export const updateSSLCertificate = async (req, res) => {
       }
     }
 
+
     const ssl = await SSLCertificate.findByPk(id)
 
     if (!ssl) {
@@ -199,6 +201,9 @@ export const updateSSLCertificate = async (req, res) => {
     }
 
     const oldData = ssl.toJSON()
+
+    console.log("OLD:", oldData)
+    console.log("NEW:", filteredUpdates)
 
     //  Check if anything actually changed
     let hasChanges = false
