@@ -41,3 +41,8 @@ export const getControlPanels = async () => {
   const res = await axios.get(`${API_URL}/controlPanels/control-panels`)
   return res.data
 }
+
+export const getSSLCertificateTimeline = async (id: string) => {
+  const res = await axios.get(`${API_URL}/ssl-certificates/${id}/timeline`)
+  return res.data
+}

@@ -15,6 +15,8 @@ import {SSLCertificatesPage} from '../modules/sslCertificates/pages/SSLCertifica
 import {CreateSSLCertificatePage} from '../modules/sslCertificates/pages/CreateSSLCertificatePage'
 import {EditSSLCertificatePage} from '../modules/sslCertificates/pages/EditSSLCertificatePage'
 import { DomainViewPage } from '../modules/domains/pages/DomainViewPage'
+import {SSLCertificateTimelinePage} from "../modules/sslCertificates/pages/SSLCertificateTimelinePage"
+import { SSLCertificateViewPage } from '../modules/sslCertificates/pages/SSLCertificateViewPage'
 
 const PrivateRoutes = () => {
   const WizardsPage = lazy(() => import('../modules/wizards/WizardsPage'))
@@ -35,7 +37,9 @@ const PrivateRoutes = () => {
         <Route path="/dns-records" element={<DNSRecordsPage />} />
         <Route path="/ssl-certificates" element={<SSLCertificatesPage />} />
         <Route path="/ssl-certificates/create" element={<CreateSSLCertificatePage />} />
-        <Route path="/ssl-certificates/edit/:id" element={<EditSSLCertificatePage />} />
+        <Route path="/ssl-certificates/:id" element={<SSLCertificateViewPage />}/>
+        <Route path="/ssl-certificates/:id/edit" element={<EditSSLCertificatePage />} />
+        <Route path="/ssl-certificates/:id/timeline" element={<SSLCertificateTimelinePage />}/>
         <Route path='builder' element={<BuilderPageWrapper />} />
         <Route path='menu-test' element={<MenuTestPage />} />
         {/* Lazy Modules */}

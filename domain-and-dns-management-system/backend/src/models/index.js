@@ -74,6 +74,15 @@ SSLCertificate.hasMany(SSLCertificate, {
   as: "renewals"
 })
 
+SSLCertificate.belongsTo(User, {
+   foreignKey: "requested_by",
+    as: "requester" 
+})
+SSLCertificate.belongsTo(User, {
+   foreignKey: "approved_by",
+    as: "approver" 
+})
+
 
 // User relations (requested / approved)
 User.hasMany(Domain, { foreignKey: "requested_by", as: "requestedDomains" })
