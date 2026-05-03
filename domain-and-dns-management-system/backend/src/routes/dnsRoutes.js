@@ -7,7 +7,7 @@ const router = express.Router()
 router.use(authenticateToken)
 router.get("/fetch/:domainId", fetchDnsRecords)
 router.get("/dns-records", getAllDnsRecords)
-router.get("/dns-records/:domainId", getDnsRecordsByDomain)
+router.get("/dns-records/domain/:domainId", getDnsRecordsByDomain)
 router.get("/sync-all",syncAllDomains)
 router.get("/sync/:domainId",syncDomain)
 

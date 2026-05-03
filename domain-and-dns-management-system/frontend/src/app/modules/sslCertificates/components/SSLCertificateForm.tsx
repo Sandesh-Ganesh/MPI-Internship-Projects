@@ -42,7 +42,14 @@ export const SSLCertificateForm = ({
   }, [])
 
   const handleChange = (e: any) => {
-    setForm({...form, [e.target.name]: e.target.value})
+    const { name, value } = e.target
+
+    setForm({
+      ...form,
+      [name]: ["vendor_id", "control_panel_id", "domain_id", "approved_by"].includes(name)
+        ? value === "" ? null : Number(value)
+        : value
+    })
   }
   console.log("loading:", loading)
   return (

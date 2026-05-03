@@ -4,7 +4,7 @@ import {PageTitle} from "../../../../_metronic/layout/core"
 import {Content} from "../../../../_metronic/layout/components/content"
 import {ToolbarWrapper} from "../../../../_metronic/layout/components/toolbar"
 import {useNavigate} from "react-router-dom"
-import { DomainsTable } from "../components/DomainsTable"
+import {DomainsList} from "../components/DomainsList"
 
 export const DomainsPage = () => {
   const [domains, setDomains] = useState<any[]>([])
@@ -76,7 +76,7 @@ export const DomainsPage = () => {
         </div>
 
         {/* 📊 TABLE */}
-        <DomainsTable domains={domains} />
+        <DomainsList domains={domains} />
       </>
     )}
   </Content>

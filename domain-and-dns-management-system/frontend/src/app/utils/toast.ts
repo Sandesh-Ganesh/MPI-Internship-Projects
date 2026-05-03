@@ -7,7 +7,7 @@ export const showToast = (message: string, type: "success" | "error" = "success"
 
   toast.className = `toast show align-items-center text-white ${
     type === "success" ? "bg-success" : "bg-danger"
-  } border-0 mb-3`
+  } border-0 mb-3 shadow`
 
   toast.innerHTML = `
     <div class="d-flex">
@@ -15,6 +15,9 @@ export const showToast = (message: string, type: "success" | "error" = "success"
       <button type="button" class="btn-close btn-close-white me-2 m-auto"></button>
     </div>
   `
+  toast.querySelector("button")?.addEventListener("click", () => {
+    toast.remove()
+  })
 
   toastContainer.appendChild(toast)
 

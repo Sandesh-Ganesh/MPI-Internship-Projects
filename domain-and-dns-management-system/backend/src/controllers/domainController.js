@@ -1,5 +1,7 @@
 import Domain from "../models/Domain.js"
 import ActivityLog from "../models/ActivityLog.js"
+import Company from "../models/Company.js"
+import Vendor from "../models/Vendor.js"
 
 export const createDomain = async (req,res)=>{
   try{
@@ -74,7 +76,18 @@ export const createDomain = async (req,res)=>{
 export const getAllDomains = async (req,res)=>{
   try{
 
-    const domains = await Domain.findAll()
+    const domains = await Domain.findAll({
+      include: [
+        {
+          model: Company,
+          attributes: ["company_id", "company_name"]
+        },
+        {
+          model: Vendor,
+          attributes: ["vendor_id", "vendor_name"]
+        }
+      ]
+    })
 
     return res.status(200).json(domains)
 
@@ -90,7 +103,18 @@ export const getDomainById = async (req,res)=>{
 
     const { id } = req.params
 
-    const domain = await Domain.findByPk(id)
+    const domain = await Domain.findByPk(id,{
+       include: [
+        {
+          model: Company,
+          attributes: ["company_id", "company_name"]
+        },
+        {
+          model: Vendor,
+          attributes: ["vendor_id", "vendor_name"]
+        }
+      ]
+    })
 
     if(!domain){
       return res.status(404).json({
@@ -107,40 +131,81 @@ export const getDomainById = async (req,res)=>{
   }
 }
 
-export const updateDomain = async (req,res)=>{
-  try{
-
+export const updateDomain = async (req, res) => {
+  try {
     const { id } = req.params
+    const updates = req.body
+
+    const allowedUpdates = [
+      "company_id",
+      "vendor_id",
+      "cost_center_id",
+      "control_panel_id",
+      "dns_control_panel_id",
+      "approved_by",
+      "remarks",
+      "expiry_date",
+      "usage_flag",
+      "status"
+    ]
+
+    const filteredUpdates = {}
+
+    for (let key of allowedUpdates) {
+      if (updates[key] !== undefined) {
+        filteredUpdates[key] = updates[key]
+      }
+    }
 
     const domain = await Domain.findByPk(id)
 
-    if(!domain){
+    if (!domain) {
       return res.status(404).json({
-        message:"Domain not found"
+        message: "Domain not found"
       })
     }
 
     const oldData = domain.toJSON()
 
-    await domain.update(req.body)
+    // 🔥 CHECK FOR CHANGES (same as SSL)
+    let hasChanges = false
 
+    for (let key of Object.keys(filteredUpdates)) {
+      if (oldData[key] !== filteredUpdates[key]) {
+        hasChanges = true
+        break
+      }
+    }
+
+    // ❌ NO CHANGE
+    if (!hasChanges) {
+      return res.status(200).json({
+        message: "No changes detected",
+        data: domain
+      })
+    }
+
+    // ✅ UPDATE
+    await domain.update(filteredUpdates)
+
+    // 📝 LOG ONLY IF CHANGED
     await ActivityLog.create({
       log_type: "DOMAIN",
       entity_id: domain.domain_id,
-      user_id: req.user.userId,
+      user_id: req.user?.userID,
       action: "UPDATE",
       old_value: oldData,
-      new_value: domain
+      new_value: domain.toJSON()
     })
 
     return res.status(200).json({
-      message:"Domain updated successfully",
-      data:domain
+      message: "Domain updated successfully",
+      data: domain
     })
 
-  }catch(error){
+  } catch (error) {
     return res.status(500).json({
-      message:error.message
+      message: error.message
     })
   }
 }

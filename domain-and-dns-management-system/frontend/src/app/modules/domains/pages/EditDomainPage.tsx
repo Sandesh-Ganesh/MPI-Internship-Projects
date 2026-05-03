@@ -5,6 +5,7 @@ import axios from "axios"
 import {Content} from "../../../../_metronic/layout/components/content"
 import {PageTitle} from "../../../../_metronic/layout/core"
 import {DomainForm} from "../components/DomainForm"
+import { showToast } from "../../../utils/toast"
 
 const API_URL = import.meta.env.VITE_APP_API_URL
 
@@ -49,9 +50,12 @@ export const EditDomainPage = () => {
         approved_by: form.approved_by ? Number(form.approved_by) : null,
       })
 
+      showToast("Domain updated successfully", "success")
+
       navigate("/domains")
     } catch (err) {
       console.error(err)
+      showToast("Failed to update domain", "error")
     }
   }
 

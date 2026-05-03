@@ -4,6 +4,7 @@ import axios from "axios"
 import {Content} from "../../../../_metronic/layout/components/content"
 import {PageTitle} from "../../../../_metronic/layout/core"
 import {DomainForm} from "../components/DomainForm"
+import {showToast} from "../../../utils/toast"
 
 const API_URL = import.meta.env.VITE_APP_API_URL
 
@@ -41,9 +42,12 @@ export const CreateDomainPage = () => {
         approved_by: form.approved_by ? Number(form.approved_by) : null,
       })
 
+      showToast("Domain created successfully")
+
       navigate("/domains")
     } catch (err) {
       console.error(err)
+      showToast("Failed to create domain", "error")
     }
   }
 
