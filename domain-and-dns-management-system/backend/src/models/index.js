@@ -10,7 +10,7 @@ import SSLCertificate from "./SSLCertificate.js"
 import ActivityLog from "./ActivityLog.js"
 import DNSSyncLog from "./DNSSyncLog.js"
 import User from "./User.js"
-
+import DNSChangeLog from "./DNSChangeLog.js"
 
 //  Company → CostCenter
 Company.hasMany(CostCenter, { foreignKey: "company_id" })
@@ -114,3 +114,22 @@ export {
   DNSSyncLog,
   User
 }
+
+//Associations for DNS Change Logs (defined here to avoid circular imports)
+//DNSChange -> Domain
+DNSChangeLog.belongsTo(Domain, {
+  foreignKey: "domain_id",
+  as: "domain",
+})
+
+//Domain -> DNSChange
+Domain.hasMany(DNSChangeLog, {
+  foreignKey: "domain_id",
+})
+
+//DNSChangeLog -> DNSRecord
+DNSChangeLog.belongsTo(DNSRecord, {
+  foreignKey: "provider_record_id",
+  targetKey: "provider_record_id",
+  as: "dnsRecord",
+})

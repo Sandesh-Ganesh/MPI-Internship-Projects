@@ -1,5 +1,6 @@
 import DNSChangeLog from "../models/DNSChangeLog.js"
 import { Op } from "sequelize"
+import Domain from "../models/Domain.js"
 
 export const getAllDNSChangeLogs = async (req, res) => {
   try {
@@ -26,6 +27,13 @@ export const getAllDNSChangeLogs = async (req, res) => {
     const offset = (page - 1) * limit
 
     const { count, rows } = await DNSChangeLog.findAndCountAll({
+      include: [
+        {
+          model: Domain,
+          as: "domain",
+          attributes: ["domain_name"],
+        },
+      ],
       where,
       order: [["createdAt", "DESC"]],
       limit: parseInt(limit),
@@ -49,6 +57,13 @@ export const getDNSChangeLogsByDomain = async (req, res) => {
     const { domainId } = req.params
 
     const logs = await DNSChangeLog.findAll({
+      include: [
+        {
+          model: Domain,
+          as: "domain",
+          attributes: ["domain_name"],
+        },
+      ],
       where: { domain_id: domainId },
       order: [["createdAt", "DESC"]],
     })
