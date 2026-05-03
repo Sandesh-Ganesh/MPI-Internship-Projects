@@ -6,6 +6,8 @@ import {
   getSSLCertificateById,
   updateSSLCertificate,
   deleteSSLCertificate,
+  getSSLCertificateTimeline,
+  getActiveSSLPerDomain
 } from "../controllers/SSLCertificateController.js"
 
 import { authenticateToken } from "../middleware/authMiddleware.js"
@@ -19,7 +21,11 @@ router.post("/ssl-certificates", allowRoles("ADMIN"), createSSLCertificate)
 
 router.get("/ssl-certificates", getAllSSLCertificates)
 
+router.get("/ssl-certificates/domain/:domainId/active", getActiveSSLPerDomain )
+
 router.get("/ssl-certificates/:id", getSSLCertificateById)
+
+router.get("/ssl-certificates/:id/timeline", getSSLCertificateTimeline)
 
 router.put("/ssl-certificates/:id", allowRoles("ADMIN"), updateSSLCertificate)
 

@@ -15,6 +15,11 @@ const App = () => {
             <AuthInit>
               <Outlet />
               <MasterInit />
+              <div
+                id="kt_toast_container"
+                className="position-fixed top-0 end-0 p-5"
+                style={{zIndex: 9999}}
+              />
             </AuthInit>
           </ThemeModeProvider>
         </LayoutProvider>
