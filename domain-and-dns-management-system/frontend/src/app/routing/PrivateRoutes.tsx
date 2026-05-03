@@ -17,6 +17,7 @@ import {EditSSLCertificatePage} from '../modules/sslCertificates/pages/EditSSLCe
 import { DomainViewPage } from '../modules/domains/pages/DomainViewPage'
 import {SSLCertificateTimelinePage} from "../modules/sslCertificates/pages/SSLCertificateTimelinePage"
 import { SSLCertificateViewPage } from '../modules/sslCertificates/pages/SSLCertificateViewPage'
+import { ActivityLogsPage } from '../modules/logs/pages/ActivityLogsPage'
 
 const PrivateRoutes = () => {
   const WizardsPage = lazy(() => import('../modules/wizards/WizardsPage'))
@@ -40,6 +41,7 @@ const PrivateRoutes = () => {
         <Route path="/ssl-certificates/:id" element={<SSLCertificateViewPage />}/>
         <Route path="/ssl-certificates/:id/edit" element={<EditSSLCertificatePage />} />
         <Route path="/ssl-certificates/:id/timeline" element={<SSLCertificateTimelinePage />}/>
+        <Route path="/activity-logs" element={<ActivityLogsPage />} />
         <Route path='builder' element={<BuilderPageWrapper />} />
         <Route path='menu-test' element={<MenuTestPage />} />
         {/* Lazy Modules */}
