@@ -3,6 +3,7 @@ import {useParams, useNavigate} from "react-router-dom"
 import axios from "axios"
 import {Content} from "../../../../_metronic/layout/components/content"
 import {PageTitle} from "../../../../_metronic/layout/core"
+import DNSRecordsTable from "../../dnsRecords/components/DNSRecordsTable"
 
 const API_URL = import.meta.env.VITE_APP_API_URL
 
@@ -12,6 +13,7 @@ export const DomainViewPage = () => {
 
   const [domain, setDomain] = useState<any>(null)
   const [ssl, setSSL] = useState<any>(null)
+  const [dnsRecords, setDnsRecords] = useState<any[]>([])
 
   const fetchDomain = async () => {
     try {
@@ -33,9 +35,21 @@ export const DomainViewPage = () => {
     }
   }
 
+  const fetchDNSRecords = async () => {
+  try {
+    const res = await axios.get(
+      `${API_URL}/records/dns-records/domain/${id}`
+    )
+    setDnsRecords(res.data)
+  } catch (err) {
+    console.error("No DNS records found")
+  }
+}
+
   useEffect(() => {
     fetchDomain()
     fetchSSL()
+    fetchDNSRecords()
   }, [])
 
   if (!domain) return <p>Loading...</p>
@@ -186,7 +200,19 @@ export const DomainViewPage = () => {
 
             </div>
           )}
+          
         </div>
+
+        <div className="card p-5 mb-5">
+            <h4 className="mb-4">DNS Records</h4>
+
+            {dnsRecords.length === 0 ? (
+              <div className="text-muted">No DNS records found</div>
+            ) : (
+              <DNSRecordsTable records={dnsRecords} hideDomain />
+            )}
+          </div>
+
       </Content>
     </>
   )
