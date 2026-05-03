@@ -41,6 +41,7 @@ const SidebarMenuMain = () => {
   <SidebarMenuItemWithSub to='#' title='Logs' icon='document'>
     <SidebarMenuItem to='/activity-logs' title='Activity Logs' hasBullet />
     <SidebarMenuItem to='/dns-sync-logs' title='DNS Sync Logs' hasBullet />
+    <SidebarMenuItem to='/dns-change-logs' title='DNS Change Logs' hasBullet />
   </SidebarMenuItemWithSub>
   )}
   {/* Admin */}
