@@ -14,6 +14,7 @@ import dnsRoutes from './routes/dnsRoutes.js'
 import activityLogRoutes from './routes/activityLogRoutes.js'
 import SSLCerticateRoutes from './routes/SSLCertificateRoutes.js'
 import dnsSyncLogRoutes from './routes/dnsSyncLogRoutes.js'
+import dnsChangeLogRoutes from './routes/dnsChangeLogRoutes.js'
 import {
   Company,
   CostCenter,
@@ -62,6 +63,8 @@ app.use("/api/activity-logs",activityLogRoutes)
 app.use("/api",SSLCerticateRoutes)
 
 app.use("/api", dnsSyncLogRoutes)
+
+app.use("/api/dns-change-logs",dnsChangeLogRoutes)
 
 const startServer = async () => {
   await connectDB();
