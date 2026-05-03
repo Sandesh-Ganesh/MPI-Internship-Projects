@@ -4,6 +4,8 @@ import axios from "axios"
 import {Content} from "../../../../_metronic/layout/components/content"
 import {PageTitle} from "../../../../_metronic/layout/core"
 import DNSRecordsTable from "../../dnsRecords/components/DNSRecordsTable"
+import ActivityLogsTable from "../../logs/components/ActivityLogsTable"
+import { getActivityLogs } from "../../logs/api/activityLogsApi"
 
 const API_URL = import.meta.env.VITE_APP_API_URL
 
@@ -14,6 +16,7 @@ export const DomainViewPage = () => {
   const [domain, setDomain] = useState<any>(null)
   const [ssl, setSSL] = useState<any>(null)
   const [dnsRecords, setDnsRecords] = useState<any[]>([])
+  const [logs, setLogs] = useState<any[]>([])
 
   const fetchDomain = async () => {
     try {
@@ -45,11 +48,24 @@ export const DomainViewPage = () => {
     console.error("No DNS records found")
   }
 }
+  const fetchLogs = async () => {
+    try {
+      const data = await getActivityLogs({
+        log_type: "DOMAIN",
+        entity_id: id,
+      })
+
+      setLogs(data.logs || [])
+    } catch (error) {
+      console.error("Error fetching domain logs", error)
+    }
+  }
 
   useEffect(() => {
     fetchDomain()
     fetchSSL()
     fetchDNSRecords()
+    fetchLogs()
   }, [])
 
   if (!domain) return <p>Loading...</p>
@@ -211,6 +227,10 @@ export const DomainViewPage = () => {
             ) : (
               <DNSRecordsTable records={dnsRecords} hideDomain />
             )}
+          </div>
+
+          <div className="mt-10">
+            <ActivityLogsTable logs={logs}  title="Domain Activity Logs" showDropDown={false} />
           </div>
 
       </Content>

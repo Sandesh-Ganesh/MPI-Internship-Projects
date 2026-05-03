@@ -3,6 +3,8 @@ import {useNavigate, useParams} from "react-router-dom"
 import {Content} from "../../../../_metronic/layout/components/content"
 import {PageTitle} from "../../../../_metronic/layout/core"
 import {getSSLCertificateById} from "../api/sslCertificatesApi"
+import { getActivityLogs } from "../../logs/api/activityLogsApi"
+import ActivityLogsTable from "../../logs/components/ActivityLogsTable"
 
 const Detail = ({label, value}: any) => (
   <div className="col-md-4 mb-4">
@@ -20,6 +22,20 @@ export const SSLCertificateViewPage = () => {
   const {id} = useParams()
   const navigate = useNavigate()
   const [ssl, setSSL] = useState<any>(null)
+  const [logs, setLogs] = useState<any[]>([])
+
+  const fetchLogs = async () => {
+  try {
+    const data = await getActivityLogs({
+      log_type: "SSL",
+      entity_id: id,
+    })
+
+    setLogs(data.logs || [])
+  } catch (error) {
+    console.error("Error fetching SSL logs", error)
+  }
+}
 
   useEffect(() => {
     const fetch = async () => {
@@ -27,6 +43,7 @@ export const SSLCertificateViewPage = () => {
       setSSL(data)
     }
     fetch()
+    fetchLogs()
   }, [id])
 
   if (!ssl) return <div>Loading...</div>
@@ -117,6 +134,10 @@ export const SSLCertificateViewPage = () => {
             <Detail label="Remarks" value={ssl.remarks || "-"} />
 
           </div>
+        </div>
+
+        <div className="mt-10">
+          <ActivityLogsTable logs={logs} title="SSL Activity Logs" showDropDown={false} />
         </div>
 
       </Content>
