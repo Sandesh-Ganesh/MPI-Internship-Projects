@@ -44,7 +44,9 @@ export const DomainsList = ({domains}: any) => {
                 {/* 🔹 LEFT */}
                 <div className="d-flex flex-column">
 
-                  <span className="fw-bold fs-6">
+                  <span className="fw-bold cursor-pointer text-primary"
+                    onClick={() => navigate(`/domains/view/${domain.domain_id}`)}
+                  >
                     {domain.domain_name}
                   </span>
 

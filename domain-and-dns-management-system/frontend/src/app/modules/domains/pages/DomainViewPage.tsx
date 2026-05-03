@@ -46,20 +46,42 @@ export const DomainViewPage = () => {
       <Content>
 
         {/* 🔙 BACK */}
-        <button
-          className="btn btn-light-primary mb-5"
-          onClick={() => navigate("/domains")}
-        >
-          ← Back
-        </button>
-
-        {/* 🔹 TOP CARD */}
         <div className="card p-5 mb-5">
-          <h2 className="fw-bold">{domain.domain_name}</h2>
+          <div className="d-flex justify-content-between align-items-center">
 
-          <span className="badge badge-light-success mt-2">
-            {getExpiryStatus()}
-          </span>
+            {/* LEFT */}
+            <div>
+              <h2 className="fw-bold mb-2">{domain.domain_name}</h2>
+
+              <span className={`badge ${
+                getExpiryStatus() === "EXPIRED"
+                  ? "badge-light-danger"
+                  : getExpiryStatus() === "EXPIRING"
+                  ? "badge-light-warning"
+                  : "badge-light-success"
+              }`}>
+                {getExpiryStatus()}
+              </span>
+            </div>
+
+            {/* RIGHT */}
+            <div className="d-flex gap-3">
+              <button
+                className="btn btn-light-primary"
+                onClick={() => navigate(`/domains/edit/${domain.domain_id}`)}
+              >
+                Edit
+              </button>
+
+              <button
+                className="btn btn-light"
+                onClick={() => navigate("/domains")}
+              >
+                Back
+              </button>
+            </div>
+
+          </div>
         </div>
 
         {/* 🔹 OVERVIEW */}
@@ -92,12 +114,12 @@ export const DomainViewPage = () => {
           <div className="row">
             <div className="col-md-6 mb-3">
               <strong>Registered Date:</strong>{" "}
-              {new Date(domain.registered_date).toLocaleDateString()}
+              {new Date(domain.registered_date).toLocaleDateString("en-IN")}
             </div>
 
             <div className="col-md-6 mb-3">
               <strong>Expiry Date:</strong>{" "}
-              {new Date(domain.expiry_date).toLocaleDateString()}
+              {new Date(domain.expiry_date).toLocaleDateString("en-IN")}
             </div>
           </div>
         </div>
