@@ -1,6 +1,6 @@
 import DNSSyncLog from "../models/DNSSyncLog.js"
 import { Op } from "sequelize"
-
+import Domain from "../models/Domain.js"
 export const getDNSyncLogs = async (req, res) => {
   try {
 
@@ -35,6 +35,12 @@ export const getDNSyncLogs = async (req, res) => {
     const offset = (page - 1) * limit
 
     const { count, rows } = await DNSSyncLog.findAndCountAll({
+      include: [
+        {
+          model: Domain,
+          attributes: ["domain_id", "domain_name"]
+        },
+      ],
       where,
       order: [["createdAt", "DESC"]],
       limit: Number(limit),
@@ -45,7 +51,7 @@ export const getDNSyncLogs = async (req, res) => {
       total: count,
       page: Number(page),
       totalPages: Math.ceil(count / limit),
-      data: rows
+      logs: rows
     })
 
   } catch (error) {
