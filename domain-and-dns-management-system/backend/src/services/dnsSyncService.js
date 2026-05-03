@@ -2,46 +2,110 @@ import DNSRecord from "../models/DNSRecord.js"
 import { getDnsRecords } from "./dnsService.js" 
 import Domain from "../models/Domain.js" 
 import DNSSyncLog from "../models/DNSSyncLog.js"
+import DNSChangeLog from "../models/DNSChangeLog.js"
+
 export const syncDnsRecords = async (domainId) => {
 
   const externalRecords = await getDnsRecords({
     domainId,
     format: false
-  }) 
+  })
 
-  // console.log("External Record - ",domainId,"\n",externalRecords)
+  // 🔥 Get all DB records once
+  const dbRecords = await DNSRecord.findAll({
+    where: { domain_id: domainId }
+  })
 
-  const results = [] 
+  const dbMap = new Map(
+    dbRecords.map((r) => [r.provider_record_id, r])
+  )
+
+  const processedIds = new Set()
+  const results = []
 
   for (const record of externalRecords) {
 
-    const existing = await DNSRecord.findOne({
-      where: { provider_record_id: record.id }
-    }) 
+    const existing = dbMap.get(record.id)
 
     const data = {
       domain_id: domainId,
       provider_record_id: record.id,
-      dns_name:record.name,
+      dns_name: record.name,
       record_type: record.type,
       record_value: record.content,
       ttl: record.ttl,
-      proxied:record.proxied,
-      createdAt:record.created_on,
-      updatedAt:record.modified_on,
-    } 
+      proxied: record.proxied,
+    }
 
     if (existing) {
-      await existing.update(data) 
-      results.push({ status: "updated", id: existing.dns_id}) 
+      processedIds.add(record.id)
+
+      const oldData = existing.toJSON()
+
+      const normalize = (val) =>
+        typeof val === "string" ? val.trim().toLowerCase() : val
+
+      //Detect change
+      const hasChanged =
+        normalize(oldData.dns_name) !== normalize(data.dns_name) ||
+        normalize(oldData.record_type) !== normalize(data.record_type) ||
+        normalize(oldData.record_value) !== normalize(data.record_value) ||
+        oldData.ttl !== data.ttl ||
+        oldData.proxied !== data.proxied
+
+      if (hasChanged) {
+        await existing.update(data)
+
+        // LOG UPDATE
+        await DNSChangeLog.create({
+          domain_id: domainId,
+          provider_record_id: record.id,
+          action: "UPDATE",
+          old_value: oldData,
+          new_value: data,
+        })
+
+        results.push({ status: "updated", id: existing.dns_id })
+      }
+
     } else {
-      const newRecord = await DNSRecord.create(data) 
-      results.push({ status: "created", id: newRecord.id }) 
+      const newRecord = await DNSRecord.create(data)
+
+      processedIds.add(record.id)
+
+      // LOG CREATE
+      await DNSChangeLog.create({
+        domain_id: domainId,
+        provider_record_id: record.id,
+        action: "CREATE",
+        new_value: data,
+      })
+
+      results.push({ status: "created", id: newRecord.dns_id })
     }
   }
-  
-  return results 
-} 
+
+  // Detect deleted records
+  for (const dbRecord of dbRecords) {
+    if (!processedIds.has(dbRecord.provider_record_id)) {
+
+      const oldData = dbRecord.toJSON()
+
+      await DNSChangeLog.create({
+        domain_id: domainId,
+        provider_record_id: dbRecord.provider_record_id,
+        action: "DELETE",
+        old_value: oldData,
+      })
+
+      await dbRecord.destroy()
+
+      results.push({ status: "deleted", id: dbRecord.dns_id })
+    }
+  }
+
+  return results
+}
 
 export const syncAllDomainsDnsRecords = async () => {
 
@@ -91,6 +155,5 @@ export const syncAllDomainsDnsRecords = async () => {
       })
     }
   }
-  
   return results
 }
