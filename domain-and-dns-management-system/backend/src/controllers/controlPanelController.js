@@ -51,7 +51,13 @@ export const getAllControlPanels = async (req,res)=>{
   try{
 
     const panels = await ControlPanel.findAll({
-      where:{ status:"ACTIVE" }
+      where:{ status:"ACTIVE" },
+      include: [
+      {
+        model: Vendor,
+        attributes: ["vendor_id", "vendor_name"]
+      }
+    ]
     })
 
     return res.status(200).json(panels)
