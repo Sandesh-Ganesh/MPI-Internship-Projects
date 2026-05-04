@@ -125,7 +125,10 @@ const DNSChangeLogsTable = ({ logs }: Props) => {
                     ) : (
                       changes.map((change: any, i: number) => (
                         <div key={i}>
-                          <strong>{change.field}</strong>:{" "}
+                          <strong className="text-dark" >{change.field === "record_value" ? "Value" :
+                            change.field === "dns_name" ? "Name" :
+                            change.field === "record_type" ? "Type" :
+                            change.field}</strong>:{" "}
                           <span className="text-danger">
                             {String(change.old)}
                           </span>{" "}

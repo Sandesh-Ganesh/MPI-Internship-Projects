@@ -1,5 +1,6 @@
 # Logs
-frontend/logs
+backend/logs/
+!frontend/src/app/modules/logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
