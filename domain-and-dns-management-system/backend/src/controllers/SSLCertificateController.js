@@ -191,7 +191,6 @@ export const updateSSLCertificate = async (req, res) => {
       }
     }
 
-
     const ssl = await SSLCertificate.findByPk(id)
 
     if (!ssl) {
