@@ -1,5 +1,5 @@
 import Vendor from "../models/Vendor.js" 
-
+import ControlPanel from "../models/ControlPanel.js"
 // CREATE Vendor
 export const createVendor = async (req, res) => {
   try {
@@ -43,24 +43,34 @@ export const getAllVendors = async (req, res) => {
 // GET SINGLE Vendor
 export const getVendorById = async (req, res) => {
   try {
-    const { id } = req.params 
-    console.log(id)
-    const vendor = await Vendor.findByPk(id) 
+    const { id } = req.params
+
+    const vendor = await Vendor.findByPk(id, {
+      include: [
+        {
+          model: ControlPanel,
+          attributes: [
+            "control_panel_id",
+            "panel_name",
+            "dns_flag",
+            "hosting_flag",
+            "ssl_flag",
+            "status"
+          ]
+        }
+      ]
+    })
 
     if (!vendor) {
-      return res.status(404).json({
-        message: "Vendor not found"
-      }) 
+      return res.status(404).json({ message: "Vendor not found" })
     }
 
-    return res.status(200).json(vendor) 
+    return res.status(200).json(vendor)
 
   } catch (error) {
-    return res.status(500).json({
-      message: error.message
-    }) 
+    return res.status(500).json({ message: error.message })
   }
-} 
+}
 
 
 

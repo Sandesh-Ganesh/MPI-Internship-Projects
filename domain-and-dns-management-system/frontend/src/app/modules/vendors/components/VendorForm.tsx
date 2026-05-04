@@ -1,43 +1,31 @@
 import { useEffect, useState } from "react"
 
 const VendorForm = ({ mode, initialData, onSubmit }: any) => {
-  const [formData, setFormData] = useState({
-    vendor_name: "",
-  })
+  const [vendorName, setVendorName] = useState("")
 
   useEffect(() => {
     if (initialData) {
-      setFormData({
-        vendor_name: initialData.vendor_name || "",
-      })
+      setVendorName(initialData.vendor_name)
     }
   }, [initialData])
 
-  const handleChange = (e: any) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    })
-  }
-
   const handleSubmit = (e: any) => {
     e.preventDefault()
-    onSubmit(formData)
+    onSubmit({ vendor_name: vendorName })
   }
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="card">
+      <div className="card w-50 mx-auto">
+
         <div className="card-body">
 
-          <div className="mb-3">
-            <label className="form-label">Vendor Name</label>
+          <div className="mb-5">
+            <label className="form-label fw-semibold">Vendor Name</label>
             <input
-              type="text"
-              name="vendor_name"
               className="form-control"
-              value={formData.vendor_name}
-              onChange={handleChange}
+              value={vendorName}
+              onChange={(e) => setVendorName(e.target.value)}
               disabled={mode === "view"}
             />
           </div>
@@ -45,12 +33,13 @@ const VendorForm = ({ mode, initialData, onSubmit }: any) => {
         </div>
 
         {mode !== "view" && (
-          <div className="card-footer">
+          <div className="card-footer text-end">
             <button className="btn btn-primary">
               {mode === "edit" ? "Update" : "Create"}
             </button>
           </div>
         )}
+
       </div>
     </form>
   )

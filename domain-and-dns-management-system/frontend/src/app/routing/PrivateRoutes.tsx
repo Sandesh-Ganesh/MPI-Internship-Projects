@@ -24,9 +24,9 @@ import { ControlPanelsPage } from '../modules/controlPanels/pages/ControlPanelsP
 import CreateControlPanelPage from '../modules/controlPanels/pages/CreateControlPanelPage'
 import ViewControlPanelPage from '../modules/controlPanels/pages/ViewControlPanelPage'
 import EditControlPanelPage from '../modules/controlPanels/pages/EditControlPanelPage'
-import { VendorsList } from '../modules/vendors/pages/VendorsList'
+import VendorsPage from '../modules/vendors/pages/VendorsPage'
 import EditVendorPage from '../modules/vendors/pages/EditVendorPage'
-import ViewVendorPage from '../modules/vendors/pages/VendorViewPage'
+import ViewVendorPage from '../modules/vendors/pages/ViewVendorPage'
 import CreateVendorPage from '../modules/vendors/pages/CreateVendorPage'
 
 const PrivateRoutes = () => {
@@ -45,7 +45,7 @@ const PrivateRoutes = () => {
         <Route path="/control-panels/create" element={<CreateControlPanelPage />} />
         <Route path="/control-panels/edit/:id" element={<EditControlPanelPage />} />
         <Route path="/control-panels/view/:id" element={<ViewControlPanelPage />} />
-        <Route path="/vendors" element={<VendorsList/>}/>
+        <Route path="/vendors" element={<VendorsPage />} />
         <Route path="/vendors/create" element={<CreateVendorPage />} />
         <Route path="/vendors/view/:id" element={<ViewVendorPage />} />
         <Route path="/vendors/edit/:id" element={<EditVendorPage />} />
