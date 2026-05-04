@@ -50,7 +50,7 @@ app.use('/api/company', companyRoutes)
 
 app.use("/api/vendors",vendorRoutes)
 
-app.use("/api/controlPanels",controlPanelRoutes)
+app.use("/api/control-panels",controlPanelRoutes)
 
 app.use("/api/costCenters",costCenterRoutes)
 

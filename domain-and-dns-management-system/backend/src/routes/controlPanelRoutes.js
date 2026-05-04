@@ -7,14 +7,14 @@ const Router = express.Router()
 
 Router.use(authenticateToken)
 
-Router.post("/control-panels", allowRoles("ADMIN"), createControlPanel)
+Router.post("/", allowRoles("ADMIN"), createControlPanel)
 
-Router.get("/control-panels", getAllControlPanels)
+Router.get("/", getAllControlPanels)
 
-Router.get("/control-panels/:id", getControlPanelById)
+Router.get("/:id", getControlPanelById)
 
-Router.put("/control-panels/:id", allowRoles("ADMIN"), updateControlPanel)
+Router.put("/:id", allowRoles("ADMIN"), updateControlPanel)
 
-Router.patch("/control-panels/:id", allowRoles("ADMIN"), deleteControlPanel)
+Router.delete("/:id", allowRoles("ADMIN"), deleteControlPanel)
 
 export default Router

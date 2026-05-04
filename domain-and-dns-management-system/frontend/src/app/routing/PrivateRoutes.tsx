@@ -20,6 +20,10 @@ import { SSLCertificateViewPage } from '../modules/sslCertificates/pages/SSLCert
 import { ActivityLogsPage } from '../modules/logs/pages/ActivityLogsPage'
 import { SyncLogsPage } from '../modules/logs/pages/SyncLogsPage'
 import { DNSChangeLogsPage } from '../modules/logs/pages/DNSChangeLogsPage'
+import { ControlPanelsPage } from '../modules/controlPanels/pages/ControlPanelsPage'
+import CreateControlPanelPage from '../modules/controlPanels/pages/CreateControlPanelPage'
+import ViewControlPanelPage from '../modules/controlPanels/pages/ViewControlPanelPage'
+import EditControlPanelPage from '../modules/controlPanels/pages/EditControlPanelPage'
 
 const PrivateRoutes = () => {
   const WizardsPage = lazy(() => import('../modules/wizards/WizardsPage'))
@@ -33,6 +37,10 @@ const PrivateRoutes = () => {
         <Route path='auth/*' element={<Navigate to='/dashboard' />} />
         {/* Pages */}
         <Route path='dashboard' element={<DashboardWrapper />} />
+        <Route path='/control-panels' element={<ControlPanelsPage />} />
+        <Route path="/control-panels/create" element={<CreateControlPanelPage />} />
+        <Route path="/control-panels/edit/:id" element={<EditControlPanelPage />} />
+        <Route path="/control-panels/view/:id" element={<ViewControlPanelPage />} />
         <Route path='/domains' element={<DomainsPage />} />
         <Route path="/domains/create" element={<CreateDomainPage />} />
         <Route path="/domains/view/:id" element={<DomainViewPage />} />
