@@ -1,5 +1,5 @@
 import ControlPanel from "../models/ControlPanel.js"
-
+import Vendor from "../models/Vendor.js"
 
 // CREATE Control Panel
 export const createControlPanel = async (req, res) => {
@@ -49,7 +49,6 @@ export const createControlPanel = async (req, res) => {
 // GET ALL Control Panels
 export const getAllControlPanels = async (req,res)=>{
   try{
-
     const panels = await ControlPanel.findAll({
       where:{ status:"ACTIVE" },
       include: [
