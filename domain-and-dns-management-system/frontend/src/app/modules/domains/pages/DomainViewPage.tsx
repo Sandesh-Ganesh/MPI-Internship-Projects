@@ -6,6 +6,10 @@ import {PageTitle} from "../../../../_metronic/layout/core"
 import DNSRecordsTable from "../../dnsRecords/components/DNSRecordsTable"
 import ActivityLogsTable from "../../logs/components/ActivityLogsTable"
 import { getActivityLogs } from "../../logs/api/activityLogsApi"
+import SyncLogsTable from "../../logs/components/SyncLogsTable"
+import DNSChangeLogsTable from "../../logs/components/DNSChangeLogsTable"
+import { getSyncLogs } from "../../logs/api/syncLogsApi"
+import { getDNSChangeLogs } from "../../logs/api/dnsChangeLogsApi"
 
 const API_URL = import.meta.env.VITE_APP_API_URL
 
@@ -17,6 +21,8 @@ export const DomainViewPage = () => {
   const [ssl, setSSL] = useState<any>(null)
   const [dnsRecords, setDnsRecords] = useState<any[]>([])
   const [logs, setLogs] = useState<any[]>([])
+  const [syncLogs, setSyncLogs] = useState<any[]>([])
+  const [dnsChangeLogs, setDNSChangeLogs] = useState<any[]>([])
 
   const fetchDomain = async () => {
     try {
@@ -61,11 +67,37 @@ export const DomainViewPage = () => {
     }
   }
 
+  const fetchSyncLogs = async () => {
+  try {
+    const data = await getSyncLogs({
+      domain_id: id,
+      limit: 20,
+    })
+    setSyncLogs(data.logs || data)
+  } catch (error) {
+    console.error("Error fetching sync logs", error)
+  }
+}
+
+const fetchDNSChangeLogs = async () => {
+  try {
+    const data = await getDNSChangeLogs({
+      domain_id: id,
+      limit: 20,
+    })
+    setDNSChangeLogs(data.logs || [])
+  } catch (error) {
+    console.error("Error fetching DNS change logs", error)
+  }
+}
+
   useEffect(() => {
     fetchDomain()
     fetchSSL()
     fetchDNSRecords()
     fetchLogs()
+    fetchSyncLogs()
+    fetchDNSChangeLogs()
   }, [])
 
   if (!domain) return <p>Loading...</p>
@@ -227,11 +259,19 @@ export const DomainViewPage = () => {
             ) : (
               <DNSRecordsTable records={dnsRecords} hideDomain />
             )}
-          </div>
+        </div>
 
-          <div className="mt-10">
-            <ActivityLogsTable logs={logs}  title="Domain Activity Logs" showDropDown={false} />
-          </div>
+        <div className="mt-10">
+          <ActivityLogsTable logs={logs}  title="Domain Activity Logs" showDropDown={false} />
+        </div>
+
+        <div className="mt-10">
+          <SyncLogsTable logs={syncLogs} />
+        </div>
+
+        <div className="mt-10">
+          <DNSChangeLogsTable logs={dnsChangeLogs} />
+        </div>
 
       </Content>
     </>
