@@ -100,26 +100,27 @@ export const updateVendor = async (req, res) => {
 // DELETE Vendor
 export const deleteVendor = async (req, res) => {
   try {
+    const { id } = req.params
 
-    const { id } = req.params 
-
-    const vendor = await Vendor.findByPk(id) 
+    const vendor = await Vendor.findByPk(id)
 
     if (!vendor) {
       return res.status(404).json({
         message: "Vendor not found"
-      }) 
+      })
     }
 
-    await vendor.destroy() 
+    await vendor.update({
+      status: "INACTIVE"
+    })
 
     return res.status(200).json({
-      message: "Vendor deleted successfully"
-    }) 
+      message: "Vendor deactivated successfully"
+    })
 
   } catch (error) {
     return res.status(500).json({
       message: error.message
-    }) 
+    })
   }
-} 
+}

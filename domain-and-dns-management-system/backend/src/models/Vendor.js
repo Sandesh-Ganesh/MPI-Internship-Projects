@@ -22,7 +22,7 @@ const Vendor = sequelize.define(
     },
     {
         tableName:"vendors",
-        timestamps:"false",
+        timestamps:false,
     }
 )
 
