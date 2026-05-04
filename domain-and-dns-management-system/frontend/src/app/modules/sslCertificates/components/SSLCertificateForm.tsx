@@ -1,6 +1,8 @@
 import {useEffect, useState} from "react"
 import { useNavigate } from "react-router-dom"
-import {getControlPanels, getDomains, getVendors} from "../api/sslCertificatesApi"
+import { getDomains } from "../api/sslCertificatesApi"
+import { getVendors } from "../../vendors/api/vendorApi"
+import {getControlPanels} from "../../controlPanels/api/controlPanelApi"
 
 export const SSLCertificateForm = ({
   initialValues,

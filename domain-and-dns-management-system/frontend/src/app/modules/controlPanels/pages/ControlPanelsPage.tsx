@@ -11,7 +11,7 @@ export const ControlPanelsPage = () => {
       <ToolbarWrapper />
 
       <Content>
-        <ControlPanelList />
+        <ControlPanelList  />
       </Content>
     </>
   )

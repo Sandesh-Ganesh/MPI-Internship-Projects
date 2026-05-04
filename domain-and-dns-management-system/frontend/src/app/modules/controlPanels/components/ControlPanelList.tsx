@@ -3,7 +3,10 @@ import { useNavigate } from "react-router-dom"
 import { getControlPanels, deleteControlPanel } from "../api/controlPanelApi"
 import { showToast } from "../../../utils/toast"
 
-const ControlPanelList = () => {
+const ControlPanelList = ({
+    panels: externalPanels,
+    showHeader = true,
+  }:any) => {
   const [panels, setPanels] = useState<any[]>([])
   const navigate = useNavigate()
 
@@ -13,8 +16,12 @@ const ControlPanelList = () => {
   }
 
   useEffect(() => {
-    fetchData()
-  }, [])
+    if (!externalPanels) {
+        fetchData()
+      } else {
+        setPanels(externalPanels)
+      }
+  }, [externalPanels])
 
   const handleDelete = async (id: string) => {
     await deleteControlPanel(id)
@@ -24,10 +31,14 @@ const ControlPanelList = () => {
 
   return (
     <div className="card">
+      {showHeader && (
       <div className="card-header border-0 pt-6">
 
-        <div className="card-title">
-          <h2 className="fw-bold">Control Panels</h2>
+        <div>
+          <h2 className="fw-bold mb-1">Control Panels</h2>
+          <div className="text-muted fs-7">
+            Manage DNS, Hosting and SSL providers
+          </div>
         </div>
 
         <div className="card-toolbar">
@@ -40,6 +51,7 @@ const ControlPanelList = () => {
         </div>
 
       </div>
+    )}
 
       <div className="card-body">
         <table className="table align-middle table-row-dashed fs-6 gy-5 table-hover">
@@ -55,12 +67,14 @@ const ControlPanelList = () => {
           </thead>
 
           <tbody>
-            {panels.length === 0 && (
-              <div className="text-center py-10">
-                <div className="text-muted">No control panels found</div>
-              </div>
-            )}
-            {panels.map((p) => (
+            {panels.length === 0 ? (
+              <tr>
+                <td colSpan={6} className="text-center py-10">
+                  No control panels found
+                </td>
+              </tr>
+            ) : (
+            panels.map((p) => (
               <tr key={p.control_panel_id}>
                 <td>
                   <div className="d-flex flex-column">
@@ -99,7 +113,7 @@ const ControlPanelList = () => {
                   </div>
                 </td>
               </tr>
-            ))}
+            )))}
           </tbody>
         </table>
       </div>
