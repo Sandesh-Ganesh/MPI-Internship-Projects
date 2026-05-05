@@ -57,7 +57,7 @@ const CompanyList = () => {
             {companies.map((c) => (
               <tr key={c.company_id}>
                 
-                <td className="fw-bold text-gray-900">
+                <td className="fw-bold text-gray-900 text-hover-primary fs-6 cursor-pointer" onClick={() => navigate(`/companies/view/${c.company_id}`)}>
                   {c.company_name}
                 </td>
 
