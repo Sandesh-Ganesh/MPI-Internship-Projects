@@ -248,3 +248,29 @@ export const deleteDomain = async (req,res)=>{
     })
   }
 }
+
+export const getDomainsByCompany = async (req, res) => {
+  try {
+    const { companyId } = req.params;
+    const domains = await Domain.findAll({
+      where: {
+        company_id: companyId
+      },
+      include: [
+        {
+          model: Company,
+          attributes: ["company_id", "company_name"]
+        },
+        {
+          model: Vendor,
+          attributes: ["vendor_id", "vendor_name"]
+        }
+      ]
+    });
+    return res.status(200).json(domains);
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message
+    });
+  }
+};

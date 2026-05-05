@@ -4,14 +4,18 @@ import { PageTitle } from "../../../../_metronic/layout/core"
 import { ToolbarWrapper } from "../../../../_metronic/layout/components/toolbar"
 import { Content } from "../../../../_metronic/layout/components/content"
 import { getCompanyById } from "../api/companyApi"
-
+import ControlPanelList from "../../controlPanels/components/ControlPanelList"
+import { DomainsList } from "../../domains/components/DomainsList"
+import { getDomainByCompany } from "../../domains/api/domainsApi"
 const ViewCompanyPage = () => {
   const { id } = useParams()
   const navigate = useNavigate()
   const [company, setCompany] = useState<any>(null)
+  const [domains, setDomains] = useState<any[]>([])
 
   useEffect(() => {
     getCompanyById(id!).then(setCompany)
+    getDomainByCompany(id!).then(setDomains)
   }, [])
 
   if (!company) return null
@@ -76,7 +80,7 @@ const ViewCompanyPage = () => {
 
           </div>
         </div>
-
+        <DomainsList domains={domains} />
       </Content>
     </>
   )

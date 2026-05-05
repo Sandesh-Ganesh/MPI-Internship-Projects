@@ -5,7 +5,8 @@ createDomain,
 getAllDomains,
 getDomainById,
 updateDomain,
-deleteDomain
+deleteDomain,
+getDomainsByCompany,
 } from "../controllers/domainController.js"
 
 import { authenticateToken } from "../middleware/authMiddleware.js"
@@ -20,6 +21,8 @@ router.post("/domains", allowRoles("ADMIN"), createDomain)
 router.get("/domains", getAllDomains)
 
 router.get("/domains/:id", getDomainById)
+
+router.get("/domains/company/:companyId", getDomainsByCompany)
 
 router.put("/domains/:id", allowRoles("ADMIN"), updateDomain)
 
