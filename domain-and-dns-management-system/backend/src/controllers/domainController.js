@@ -2,7 +2,7 @@ import Domain from "../models/Domain.js"
 import ActivityLog from "../models/ActivityLog.js"
 import Company from "../models/Company.js"
 import Vendor from "../models/Vendor.js"
-
+import ControlPanel from "../models/ControlPanel.js"
 export const createDomain = async (req,res)=>{
   try{
 
@@ -85,7 +85,7 @@ export const getAllDomains = async (req,res)=>{
         {
           model: Vendor,
           attributes: ["vendor_id", "vendor_name"]
-        }
+        },
       ]
     })
 
@@ -112,6 +112,10 @@ export const getDomainById = async (req,res)=>{
         {
           model: Vendor,
           attributes: ["vendor_id", "vendor_name"]
+        },
+        {
+          model: ControlPanel,
+          attributes: ["control_panel_id", "panel_name"]
         }
       ]
     })

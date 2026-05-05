@@ -173,11 +173,11 @@ const fetchDNSChangeLogs = async () => {
             </div>
 
             <div className="col-md-6 mb-3">
-              <strong>Control Panel:</strong> {domain.control_panel_id}
+              <strong>Control Panel:</strong> {domain.ControlPanel?.panel_name}
             </div>
 
             <div className="col-md-6 mb-3">
-              <strong>DNS Panel:</strong> {domain.dns_control_panel_id}
+              <strong>DNS Panel:</strong> {domain.ControlPanel?.panel_name}
             </div>
           </div>
         </div>
