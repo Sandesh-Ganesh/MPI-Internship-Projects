@@ -56,7 +56,7 @@ const CompanyList = () => {
           <tbody>
             {companies.map((c) => (
               <tr key={c.company_id}>
-
+                
                 <td className="fw-bold text-gray-900">
                   {c.company_name}
                 </td>
