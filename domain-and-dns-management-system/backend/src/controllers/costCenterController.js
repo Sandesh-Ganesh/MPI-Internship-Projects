@@ -156,3 +156,23 @@ export const deleteCostCenter = async (req, res) => {
     }) 
   }
 } 
+
+export const getCostCentersByCompanyId = async (req, res) => {
+  try {
+    const { companyId } = req.params
+    const costCenters = await CostCenter.findAll({
+      where: { company_id: companyId, status: "ACTIVE" },
+      include: [
+        {
+          model: Company,
+          attributes: ["company_id", "company_name"]
+        }
+      ]
+    })
+    return res.status(200).json(costCenters)
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message
+    })
+  }
+}

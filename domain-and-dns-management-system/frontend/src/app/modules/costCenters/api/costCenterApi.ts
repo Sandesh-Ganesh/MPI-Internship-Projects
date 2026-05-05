@@ -26,3 +26,8 @@ export const deleteCostCenter = async (id: string) => {
   const res = await axios.delete(`${API_URL}/cost-centers/${id}`)
   return res.data
 }
+
+export const getCostCentersByCompany = async (companyId: string) => {
+  const res = await axios.get(`${API_URL}/cost-centers/company/${companyId}`)
+  return res.data
+} 
