@@ -1,11 +1,9 @@
 import {useEffect, useState} from "react"
 import {useNavigate} from "react-router-dom"
-import {
-  getCostCenters
-} from "../api/domainsDropdownApi"
 import { getControlPanels } from "../../controlPanels/api/controlPanelApi"
 import { getVendors } from "../../vendors/api/vendorApi"
 import { getCompanies } from "../../companies/api/companyApi"
+import { getCostCentersByCompany } from "../../costCenters/api/costCenterApi"
 export const DomainForm = ({
   initialValues,
   onSubmit,
@@ -32,11 +30,16 @@ export const DomainForm = ({
   useEffect(() => {
     const fetchDropdowns = async () => {
       try {
-        const [cc] = await Promise.all([
-          getCostCenters()
-        ])
+        const companiesData = await getCompanies()
+        setCompanies(companiesData)
 
-        setCostCenters(cc)
+        const panelsData = await getControlPanels()
+        const filteredPanels = panelsData.filter((p: any) => p.dns_flag)
+        setPanels(filteredPanels)
+
+        const vendorsData = await getVendors()
+        setVendors(vendorsData)
+
       } catch (err) {
         console.error(err)
       } finally {
@@ -44,25 +47,37 @@ export const DomainForm = ({
       }
     }
 
-    getCompanies().then((data)=>{
-      setCompanies(data)
-    })
-
     fetchDropdowns()
-    getControlPanels().then((data) => {
-    // only DNS panels
-    const filtered = data.filter((p: any) => p.dns_flag)
-    setPanels(filtered)
-    })
-    getVendors().then((data)=>{
-      setVendors(data)
-    })
-
   }, [])
 
+  useEffect(() => {
+    if (form.company_id) {
+      getCostCentersByCompany(form.company_id)
+        .then((data) => {
+          setCostCenters(data)
+        })
+        .catch((err) => console.error(err))
+    } else {
+      setCostCenters([])
+    }
+  }, [form.company_id])
+
   const handleChange = (e: any) => {
-    setForm({...form, [e.target.name]: e.target.value})
+  const { name, value } = e.target
+
+  if (name === "company_id") {
+    setForm({
+      ...form,
+      company_id: value,
+      cost_center_id: "" // reset
+    })
+  } else {
+    setForm({
+      ...form,
+      [name]: value
+    })
   }
+}
 
   return (
     <div className="card p-5">
@@ -123,7 +138,7 @@ export const DomainForm = ({
             value={form.cost_center_id}
             className="form-select"
             onChange={handleChange}
-            disabled={isView}
+            disabled={isView || !form.company_id}
           >
             <option value="">Select Cost Center</option>
             {costCenters.map((cc: any) => (
