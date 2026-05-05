@@ -32,6 +32,10 @@ import CompaniesPage from '../modules/companies/pages/CompaniesPage'
 import CreateCompanyPage from '../modules/companies/pages/CreateCompanyPage'
 import EditCompanyPage from '../modules/companies/pages/EditCompanyPage'
 import ViewCompanyPage from '../modules/companies/pages/ViewCompanyPage'
+import ViewCostCenterPage from '../modules/costCenters/pages/ViewCostCenterPage'
+import EditCostCenterPage from '../modules/costCenters/pages/EditCostCenterPage'
+import CreateCostCenterPage from '../modules/costCenters/pages/CreateCostCenterPage'
+import CostCentersPage from '../modules/costCenters/pages/CostCentersPage'
 
 const PrivateRoutes = () => {
   const WizardsPage = lazy(() => import('../modules/wizards/WizardsPage'))
@@ -49,6 +53,10 @@ const PrivateRoutes = () => {
         <Route path="/companies/create" element={<CreateCompanyPage />} />
         <Route path="/companies/view/:id" element={<ViewCompanyPage />} />
         <Route path="/companies/edit/:id" element={<EditCompanyPage />} />
+        <Route path="/cost-centers" element={<CostCentersPage />} />
+        <Route path="/cost-centers/create" element={<CreateCostCenterPage />} />
+        <Route path="/cost-centers/edit/:id" element={<EditCostCenterPage />} />
+        <Route path="/cost-centers/view/:id" element={<ViewCostCenterPage />} />
         <Route path='/control-panels' element={<ControlPanelsPage />} />
         <Route path="/control-panels/create" element={<CreateControlPanelPage />} />
         <Route path="/control-panels/edit/:id" element={<EditControlPanelPage />} />

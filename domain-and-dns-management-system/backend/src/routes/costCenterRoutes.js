@@ -6,11 +6,11 @@ import { createCostCenter, getAllCostCenters, getCostCenterById, updateCostCente
 const router = express.Router()
 
 router.use(authenticateToken)
-router.post("/costCenters", allowRoles("ADMIN"),createCostCenter)
-router.get("/costCenters/:id", getCostCenterById)
-router.get("/costCenters", getAllCostCenters)
-router.put("/costCenters/:id", allowRoles("ADMIN","MANAGER"), updateCostCenter)
+router.post("/", allowRoles("ADMIN"),createCostCenter)
+router.get("/:id", getCostCenterById)
+router.get("/", getAllCostCenters)
+router.put("/:id", allowRoles("ADMIN","MANAGER"), updateCostCenter)
 // Soft delete
-router.patch("/costCenters/:id",allowRoles("ADMIN"), deleteCostCenter)
+router.delete("/:id",allowRoles("ADMIN"), deleteCostCenter)
 
 export default router;

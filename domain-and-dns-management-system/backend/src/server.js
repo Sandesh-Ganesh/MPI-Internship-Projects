@@ -52,7 +52,7 @@ app.use("/api/vendors",vendorRoutes)
 
 app.use("/api/control-panels",controlPanelRoutes)
 
-app.use("/api/costCenters",costCenterRoutes)
+app.use("/api/cost-centers",costCenterRoutes)
 
 app.use("/api/domains",domainRoutes)
 
