@@ -46,7 +46,7 @@ app.use("/api/auth", authRoutes);
 
 app.use("/api/admin",adminOnlyRoutes)
 
-app.use('/api/company', companyRoutes)
+app.use('/api/companies', companyRoutes)
 
 app.use("/api/vendors",vendorRoutes)
 

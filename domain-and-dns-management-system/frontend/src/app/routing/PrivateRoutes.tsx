@@ -28,6 +28,10 @@ import VendorsPage from '../modules/vendors/pages/VendorsPage'
 import EditVendorPage from '../modules/vendors/pages/EditVendorPage'
 import ViewVendorPage from '../modules/vendors/pages/ViewVendorPage'
 import CreateVendorPage from '../modules/vendors/pages/CreateVendorPage'
+import CompaniesPage from '../modules/companies/pages/CompaniesPage'
+import CreateCompanyPage from '../modules/companies/pages/CreateCompanyPage'
+import EditCompanyPage from '../modules/companies/pages/EditCompanyPage'
+import ViewCompanyPage from '../modules/companies/pages/ViewCompanyPage'
 
 const PrivateRoutes = () => {
   const WizardsPage = lazy(() => import('../modules/wizards/WizardsPage'))
@@ -41,6 +45,10 @@ const PrivateRoutes = () => {
         <Route path='auth/*' element={<Navigate to='/dashboard' />} />
         {/* Pages */}
         <Route path='dashboard' element={<DashboardWrapper />} />
+        <Route path='/companies' element={<CompaniesPage />} />
+        <Route path="/companies/create" element={<CreateCompanyPage />} />
+        <Route path="/companies/view/:id" element={<ViewCompanyPage />} />
+        <Route path="/companies/edit/:id" element={<EditCompanyPage />} />
         <Route path='/control-panels' element={<ControlPanelsPage />} />
         <Route path="/control-panels/create" element={<CreateControlPanelPage />} />
         <Route path="/control-panels/edit/:id" element={<EditControlPanelPage />} />
