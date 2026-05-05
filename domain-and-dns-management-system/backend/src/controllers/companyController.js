@@ -30,7 +30,9 @@ export const createCompany = async (req, res) => {
 export const getAllCompanies = async (req, res) => {
   try {
 
-    const companies = await Company.findAll();
+    const companies = await Company.findAll({
+      where: { status: "ACTIVE" }
+    });
 
     return res.status(200).json(companies);
 
@@ -117,7 +119,9 @@ export const deleteCompany = async (req, res) => {
       });
     }
 
-    await company.destroy();
+    await company.update({
+      status: "INACTIVE"
+    });
 
     return res.status(200).json({
       message: "Company deleted successfully"

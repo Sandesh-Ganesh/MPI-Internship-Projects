@@ -6,10 +6,10 @@ import { createCompany,getAllCompanies,getCompanyById,updateCompany,deleteCompan
 const router = express.Router()
 
 router.use(authenticateToken)
-router.post("/companies", allowRoles("ADMIN"),createCompany)
-router.get("/companies", getAllCompanies)
-router.get("/companies/:id", getCompanyById)
-router.put("/companies/:id", allowRoles("ADMIN","MANAGER"), updateCompany)
-router.delete("/companies/:id",allowRoles("ADMIN"), deleteCompany)
+router.post("/", allowRoles("ADMIN"),createCompany)
+router.get("/", getAllCompanies)
+router.get("/:id", getCompanyById)
+router.put("/:id", allowRoles("ADMIN","MANAGER"), updateCompany)
+router.delete("/:id",allowRoles("ADMIN"), deleteCompany)
 
 export default router;
