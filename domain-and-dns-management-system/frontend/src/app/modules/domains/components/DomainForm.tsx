@@ -1,11 +1,11 @@
 import {useEffect, useState} from "react"
 import {useNavigate} from "react-router-dom"
 import {
-  getCompanies,
   getCostCenters
 } from "../api/domainsDropdownApi"
 import { getControlPanels } from "../../controlPanels/api/controlPanelApi"
 import { getVendors } from "../../vendors/api/vendorApi"
+import { getCompanies } from "../../companies/api/companyApi"
 export const DomainForm = ({
   initialValues,
   onSubmit,
@@ -32,12 +32,10 @@ export const DomainForm = ({
   useEffect(() => {
     const fetchDropdowns = async () => {
       try {
-        const [c, cc] = await Promise.all([
-          getCompanies(),
+        const [cc] = await Promise.all([
           getCostCenters()
         ])
 
-        setCompanies(c)
         setCostCenters(cc)
       } catch (err) {
         console.error(err)
@@ -45,6 +43,10 @@ export const DomainForm = ({
         setLoadingDropdowns(false)
       }
     }
+
+    getCompanies().then((data)=>{
+      setCompanies(data)
+    })
 
     fetchDropdowns()
     getControlPanels().then((data) => {
@@ -55,6 +57,7 @@ export const DomainForm = ({
     getVendors().then((data)=>{
       setVendors(data)
     })
+
   }, [])
 
   const handleChange = (e: any) => {
