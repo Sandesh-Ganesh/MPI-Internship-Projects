@@ -61,7 +61,7 @@ const ViewCompanyPage = () => {
         </div>
 
         {/* Details Card */}
-        <div className="card">
+        <div className="card mb-5">
           <div className="card-body">
 
             <div className="row mb-4">
