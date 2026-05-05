@@ -1,18 +1,18 @@
 import { PageTitle } from "../../../../_metronic/layout/core"
 import { ToolbarWrapper } from "../../../../_metronic/layout/components/toolbar"
 import { Content } from "../../../../_metronic/layout/components/content"
-import ControlPanelList from "../components/ControlPanelList"
+import VendorList from "../components/VendorList"
 
-export const ControlPanelsPage = () => {
+const VendorsPage = () => {
   return (
     <>
-      <PageTitle breadcrumbs={[]}>Control Panels</PageTitle>
-
+      <PageTitle>Vendors</PageTitle>
       <ToolbarWrapper />
-
       <Content>
-        <ControlPanelList  />
+        <VendorList />
       </Content>
     </>
   )
 }
+
+export default VendorsPage

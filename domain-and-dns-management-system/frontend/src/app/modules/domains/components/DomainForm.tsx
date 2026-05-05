@@ -2,10 +2,10 @@ import {useEffect, useState} from "react"
 import {useNavigate} from "react-router-dom"
 import {
   getCompanies,
-  getVendors,
   getCostCenters
 } from "../api/domainsDropdownApi"
-
+import { getControlPanels } from "../../controlPanels/api/controlPanelApi"
+import { getVendors } from "../../vendors/api/vendorApi"
 export const DomainForm = ({
   initialValues,
   onSubmit,
@@ -18,6 +18,7 @@ export const DomainForm = ({
   const [companies, setCompanies] = useState<any[]>([])
   const [vendors, setVendors] = useState<any[]>([])
   const [costCenters, setCostCenters] = useState<any[]>([])
+  const [panels, setPanels] = useState<any[]>([])
 
   const [loadingDropdowns, setLoadingDropdowns] = useState(true)
 
@@ -31,14 +32,12 @@ export const DomainForm = ({
   useEffect(() => {
     const fetchDropdowns = async () => {
       try {
-        const [c, v, cc] = await Promise.all([
+        const [c, cc] = await Promise.all([
           getCompanies(),
-          getVendors(),
           getCostCenters()
         ])
 
         setCompanies(c)
-        setVendors(v)
         setCostCenters(cc)
       } catch (err) {
         console.error(err)
@@ -48,6 +47,14 @@ export const DomainForm = ({
     }
 
     fetchDropdowns()
+    getControlPanels().then((data) => {
+    // only DNS panels
+    const filtered = data.filter((p: any) => p.dns_flag)
+    setPanels(filtered)
+    })
+    getVendors().then((data)=>{
+      setVendors(data)
+    })
   }, [])
 
   const handleChange = (e: any) => {
@@ -144,6 +151,26 @@ export const DomainForm = ({
             ))}
           </select>
         </div>
+
+        <div className="col-md-6">
+          <label className="form-label required">Control Panel</label>
+          <select
+            name="control_panel_id"
+            value={form.control_panel_id}
+            className="form-select"
+            onChange={handleChange}
+            disabled={isView}
+          >
+            <option value="">Select Control Panel</option>
+            {panels.map((p: any) => (
+              <option key={p.control_panel_id} value={p.control_panel_id}>
+                {p.panel_name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        
 
         <div className="col-md-6">
           <label className="form-label required">Usage</label>

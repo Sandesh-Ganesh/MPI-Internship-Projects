@@ -6,10 +6,10 @@ import { createVendor, getAllVendors, getVendorById, updateVendor, deleteVendor}
 const router = express.Router()
 
 router.use(authenticateToken)
-router.post("/vendors", allowRoles("ADMIN"),createVendor)
-router.get("/vendors/:id", getVendorById)
-router.get("/vendors", getAllVendors)
-router.put("/vendors/:id", allowRoles("ADMIN","MANAGER"), updateVendor)
-router.delete("/vendors/:id",allowRoles("ADMIN"), deleteVendor)
+router.post("/", allowRoles("ADMIN"),createVendor)
+router.get("/:id", getVendorById)
+router.get("/", getAllVendors)
+router.put("/:id", allowRoles("ADMIN","MANAGER"), updateVendor)
+router.delete("/:id",allowRoles("ADMIN"), deleteVendor)
 
 export default router;

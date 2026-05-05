@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-// import { getVendors } from "../../vendors/api/vendorApi"
+import { getVendors } from "../../vendors/api/vendorApi"
 
 const ControlPanelForm = ({ mode, initialData, onSubmit }: any) => {
   const [vendors, setVendors] = useState<any[]>([])
@@ -13,7 +13,7 @@ const ControlPanelForm = ({ mode, initialData, onSubmit }: any) => {
   })
 
   useEffect(() => {
-    // getVendors().then(setVendors)
+    getVendors().then(setVendors)
   }, [])
 
   useEffect(() => {
