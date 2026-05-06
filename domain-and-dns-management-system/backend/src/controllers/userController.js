@@ -31,6 +31,24 @@ export const getUserById = async (req, res) => {
   }
 }
 
+export const getUsersDropdown = async (req, res) => {
+  try {
+    const users = await User.findAll({
+      attributes: ["user_id", "username", "role"],
+      where: {
+        status: "ACTIVE"
+      }
+    })
+
+    return res.json(users)
+
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error fetching users"
+    })
+  }
+}
+
 export const updateUser = async (req, res) => {
   const { id } = req.params
   const { username, email, role, status } = req.body  
