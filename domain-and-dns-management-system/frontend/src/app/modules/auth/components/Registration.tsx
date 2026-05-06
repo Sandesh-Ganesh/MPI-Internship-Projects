@@ -30,10 +30,10 @@ const registrationSchema = Yup.object().shape({
     .min(3, 'Minimum 3 symbols')
     .max(50, 'Maximum 50 symbols')
     .required('Email is required'),
-  lastname: Yup.string()
-    .min(3, 'Minimum 3 symbols')
-    .max(50, 'Maximum 50 symbols')
-    .required('Last name is required'),
+  // lastname: Yup.string()
+  //   .min(3, 'Minimum 3 symbols')
+  //   .max(50, 'Maximum 50 symbols')
+  //   .required('Last name is required'),
   password: Yup.string()
     .min(3, 'Minimum 3 symbols')
     .max(50, 'Maximum 50 symbols')
@@ -96,34 +96,34 @@ export function Registration() {
         <h1 className='text-gray-900 fw-bolder mb-3'>Sign Up</h1>
         {/* end::Title */}
 
-        <div className='text-gray-500 fw-semibold fs-6'>Your Social Campaigns</div>
+        {/* <div className='text-gray-500 fw-semibold fs-6'>Your Social Campaigns</div> */}
       </div>
       {/* end::Heading */}
-
+      
       {/* begin::Login options */}
-      <div className='row g-3 mb-9'>
+      {/* <div className='row g-3 mb-9'> */}
         {/* begin::Col */}
-        <div className='col-md-6'>
+        {/* <div className='col-md-6'> */}
           {/* begin::Google link */}
-          <a
+          {/* <a
             href='#'
             className='btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100'
-          >
-            <img
+          > */}
+            {/* <img
               alt='Logo'
               src={toAbsoluteUrl('media/svg/brand-logos/google-icon.svg')}
               className='h-15px me-3'
             />
             Sign in with Google
-          </a>
+          </a> */}
           {/* end::Google link */}
-        </div>
+        {/* </div> */}
         {/* end::Col */}
 
         {/* begin::Col */}
-        <div className='col-md-6'>
+        {/* <div className='col-md-6'> */}
           {/* begin::Google link */}
-          <a
+          {/* <a
             href='#'
             className='btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100'
           >
@@ -138,15 +138,15 @@ export function Registration() {
               className='theme-dark-show h-15px me-3'
             />
             Sign in with Apple
-          </a>
+          </a> */}
           {/* end::Google link */}
-        </div>
+        {/* </div> */}
         {/* end::Col */}
-      </div>
+      {/* </div> */}
       {/* end::Login options */}
 
       <div className='separator separator-content my-14'>
-        <span className='w-125px text-gray-500 fw-semibold fs-7'>Or with email</span>
+        <span className='w-125px text-gray-500 fw-semibold fs-7'>With email</span>
       </div>
 
       {formik.status && (
@@ -157,9 +157,9 @@ export function Registration() {
 
       {/* begin::Form group Firstname */}
       <div className='fv-row mb-8'>
-        <label className='form-label fw-bolder text-gray-900 fs-6'>First name</label>
+        <label className='form-label fw-bolder text-gray-900 fs-6'>Username</label>
         <input
-          placeholder='First name'
+          placeholder='Username'
           type='text'
           autoComplete='off'
           {...formik.getFieldProps('firstname')}
@@ -182,9 +182,9 @@ export function Registration() {
         )}
       </div>
       {/* end::Form group */}
-      <div className='fv-row mb-8'>
+      {/* <div className='fv-row mb-8'>
         {/* begin::Form group Lastname */}
-        <label className='form-label fw-bolder text-gray-900 fs-6'>Last name</label>
+        {/* <label className='form-label fw-bolder text-gray-900 fs-6'>Last name</label>
         <input
           placeholder='Last name'
           type='text'
@@ -199,16 +199,16 @@ export function Registration() {
               'is-valid': formik.touched.lastname && !formik.errors.lastname,
             }
           )}
-        />
-        {formik.touched.lastname && formik.errors.lastname && (
+        /> */}
+        {/* {formik.touched.lastname && formik.errors.lastname && (
           <div className='fv-plugins-message-container'>
             <div className='fv-help-block'>
               <span role='alert'>{formik.errors.lastname}</span>
             </div>
           </div>
-        )}
+        )} */}
         {/* end::Form group */}
-      </div>
+      {/* </div> */} 
 
       {/* begin::Form group Email */}
       <div className='fv-row mb-8'>
@@ -320,7 +320,7 @@ export function Registration() {
             {...formik.getFieldProps('acceptTerms')}
           />
           <span>
-            I Accept the{' '}
+            I Accept the {''}
             <a
               href='https://keenthemes.com/metronic/?page=faq'
               target='_blank'
