@@ -19,13 +19,13 @@ router.use(authenticateToken)
 
 router.post("/ssl-certificates", allowRoles("ADMIN"), createSSLCertificate)
 
-router.get("/ssl-certificates", getAllSSLCertificates)
+router.get("/ssl-certificates", allowRoles("ADMIN","MANAGER"), getAllSSLCertificates)
 
-router.get("/ssl-certificates/domain/:domainId/active", getActiveSSLPerDomain )
+router.get("/ssl-certificates/domain/:domainId/active", allowRoles("ADMIN","MANAGER"), getActiveSSLPerDomain )
 
-router.get("/ssl-certificates/:id", getSSLCertificateById)
+router.get("/ssl-certificates/:id", allowRoles("ADMIN","MANAGER"), getSSLCertificateById)
 
-router.get("/ssl-certificates/:id/timeline", getSSLCertificateTimeline)
+router.get("/ssl-certificates/:id/timeline",allowRoles("ADMIN","MANAGER"), getSSLCertificateTimeline)
 
 router.put("/ssl-certificates/:id", allowRoles("ADMIN"), updateSSLCertificate)
 
