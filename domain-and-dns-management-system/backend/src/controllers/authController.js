@@ -13,7 +13,7 @@ export const signup = async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ message: "Email already exists " })
     }
-
+    
     const hashedPassword = await bcrypt.hash(password,10)
    
     const user = await User.create({
@@ -24,26 +24,9 @@ export const signup = async (req, res) => {
       status: "PENDING",
     })
 
-    // Token Generation
-    const token = jwt.sign(
-      {
-        userID: user.user_id,
-        role: user.role,
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: "1d" }
-    )
 
     return res.json({
       message: "Signup successful ",
-      user: {
-        user_id: user.user_id,
-        username: user.username,
-        email: user.email,
-        role: user.role,
-        status: user.status,
-      },
-      token,
     })
   } catch (error) {
     res.status(400).json({

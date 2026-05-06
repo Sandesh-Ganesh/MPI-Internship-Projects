@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { sequelize, connectDB } from './config/database.js';
 import authRoutes from './routes/authRoutes.js'
+import userRoutes from './routes/userRoutes.js'
 import adminOnlyRoutes from './routes/adminOnlyRoutes.js'
 import companyRoutes from './routes/companyRoutes.js'
 import vendorRoutes from './routes/vendorRoutes.js'
@@ -43,6 +44,8 @@ app.get('/',(req,res)=>{
 
 
 app.use("/api/auth", authRoutes);
+
+app.use("/api/users",userRoutes)
 
 app.use("/api/admin",adminOnlyRoutes)
 
