@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { getDomains } from "../api/sslCertificatesApi"
 import { getVendors } from "../../vendors/api/vendorApi"
 import {getControlPanels} from "../../controlPanels/api/controlPanelApi"
+import { getUsersDropdown } from "../../users/api/userApi"
 
 export const SSLCertificateForm = ({
   initialValues,
@@ -14,6 +15,7 @@ export const SSLCertificateForm = ({
   const [domains, setDomains] = useState<any[]>([])
   const [vendors, setVendors] = useState<any[]>([])
   const [controlPanels, setControlPanels] = useState<any[]>([])
+  const [users, setUsers] = useState<any[]>([])
   const [loadingDropdowns, setLoadingDropdowns] = useState(true)
   const isView = mode === "view"
   const navigate = useNavigate()
@@ -24,15 +26,17 @@ export const SSLCertificateForm = ({
   useEffect(() => {
     const fetchDropdowns = async () => {
       try {
-        const [domainData, vendorData, panelData] = await Promise.all([
+        const [domainData, vendorData, panelData, userData] = await Promise.all([
           getDomains(),
           getVendors(),
           getControlPanels(),
+          getUsersDropdown()
         ])
 
         setDomains(domainData)
         setVendors(vendorData)
         setControlPanels(panelData.filter((panel: any) => panel.ssl_flag))
+        setUsers(userData)
       } catch (error) {
         console.error(error)
       } finally {
@@ -166,11 +170,44 @@ export const SSLCertificateForm = ({
       <div className="row mb-5">
         <div className="col-md-4">
           <label className="form-label">Requested By</label>
-          <input name="requested_by" value={form.requested_by} className="form-control" onChange={handleChange} disabled={isView} />
+          <select
+            name="requested_by"
+            value={form.requested_by}
+            className="form-select"
+            onChange={handleChange}
+            disabled={isView}
+          >
+            <option value="">Select User</option>
+
+            {users.map((u: any) => (
+              <option key={u.user_id} value={u.user_id}>
+                {u.username.toUpperCase()}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="col-md-4">
           <label className="form-label">Approved By</label>
-          <input name="approved_by" value={form.approved_by} className="form-control" onChange={handleChange} disabled={isView} />
+          <select
+            name="approved_by"
+            value={form.approved_by}
+            className="form-select"
+            onChange={handleChange}
+            disabled={isView}
+          >
+            <option value="">Select Approver</option>
+
+            {users
+              .filter(
+                (u: any) =>
+                  u.role === "ADMIN" || u.role === "MANAGER"
+              )
+              .map((u: any) => (
+                <option key={u.user_id} value={u.user_id}>
+                  {u.username.toUpperCase()} ({u.role})
+                </option>
+              ))}
+          </select>
         </div>
         <div className="col-md-4">
           <label className="form-label">Status</label>

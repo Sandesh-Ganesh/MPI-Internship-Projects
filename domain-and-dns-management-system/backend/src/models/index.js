@@ -127,9 +127,8 @@ Domain.hasMany(DNSChangeLog, {
   foreignKey: "domain_id",
 })
 
-//DNSChangeLog -> DNSRecord
-DNSChangeLog.belongsTo(DNSRecord, {
-  foreignKey: "provider_record_id",
-  targetKey: "provider_record_id",
-  as: "dnsRecord",
+//DNSChangeLog -> Domain
+DNSChangeLog.belongsTo(Domain, {
+  foreignKey: "domain_id",
+  as: "logDomain",
 })

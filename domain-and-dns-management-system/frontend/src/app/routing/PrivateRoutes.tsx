@@ -36,11 +36,11 @@ import ViewCostCenterPage from '../modules/costCenters/pages/ViewCostCenterPage'
 import EditCostCenterPage from '../modules/costCenters/pages/EditCostCenterPage'
 import CreateCostCenterPage from '../modules/costCenters/pages/CreateCostCenterPage'
 import CostCentersPage from '../modules/costCenters/pages/CostCentersPage'
+import UsersPage from '../modules/users/pages/UsersPage'
 
 const PrivateRoutes = () => {
   const WizardsPage = lazy(() => import('../modules/wizards/WizardsPage'))
   const ChatPage = lazy(() => import('../modules/apps/chat/ChatPage'))
-  const UsersPage = lazy(() => import('../modules/apps/user-management/UsersPage'))
 
   return (
     <Routes>
@@ -49,6 +49,7 @@ const PrivateRoutes = () => {
         <Route path='auth/*' element={<Navigate to='/dashboard' />} />
         {/* Pages */}
         <Route path='dashboard' element={<DashboardWrapper />} />
+        <Route path='/users' element={<UsersPage/>} />
         <Route path='/companies' element={<CompaniesPage />} />
         <Route path="/companies/create" element={<CreateCompanyPage />} />
         <Route path="/companies/view/:id" element={<ViewCompanyPage />} />
@@ -94,14 +95,6 @@ const PrivateRoutes = () => {
           element={
             <SuspensedView>
               <ChatPage />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path='apps/user-management/*'
-          element={
-            <SuspensedView>
-              <UsersPage />
             </SuspensedView>
           }
         />

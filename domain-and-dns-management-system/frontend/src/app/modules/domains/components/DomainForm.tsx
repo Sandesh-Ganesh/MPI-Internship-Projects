@@ -4,6 +4,7 @@ import { getControlPanels } from "../../controlPanels/api/controlPanelApi"
 import { getVendors } from "../../vendors/api/vendorApi"
 import { getCompanies } from "../../companies/api/companyApi"
 import { getCostCentersByCompany } from "../../costCenters/api/costCenterApi"
+import { getUsersDropdown } from "../../users/api/userApi"
 export const DomainForm = ({
   initialValues,
   onSubmit,
@@ -17,7 +18,7 @@ export const DomainForm = ({
   const [vendors, setVendors] = useState<any[]>([])
   const [costCenters, setCostCenters] = useState<any[]>([])
   const [panels, setPanels] = useState<any[]>([])
-
+  const [users, setUsers] = useState<any[]>([])
   const [loadingDropdowns, setLoadingDropdowns] = useState(true)
 
   const isView = mode === "view"
@@ -39,6 +40,10 @@ export const DomainForm = ({
 
         const vendorsData = await getVendors()
         setVendors(vendorsData)
+
+        getUsersDropdown().then((data) => {
+          setUsers(data)
+        })
 
       } catch (err) {
         console.error(err)
@@ -236,24 +241,45 @@ export const DomainForm = ({
       <div className="row mb-5">
         <div className="col-md-4">
           <label className="form-label">Requested By</label>
-          <input
+          <select
             name="requested_by"
             value={form.requested_by}
-            className="form-control"
+            className="form-select"
             onChange={handleChange}
             disabled={isView}
-          />
+          >
+            <option value="">Select User</option>
+
+            {users.map((u: any) => (
+              <option key={u.user_id} value={u.user_id}>
+                {u.username.toUpperCase()} 
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="col-md-4">
           <label className="form-label">Approved By</label>
-          <input
-            name="approved_by"
-            value={form.approved_by}
-            className="form-control"
-            onChange={handleChange}
-            disabled={isView}
-          />
+          <select
+              name="approved_by"
+              value={form.approved_by}
+              className="form-select"
+              onChange={handleChange}
+              disabled={isView}
+            >
+              <option value="">Select Approver</option>
+
+              {users
+                .filter(
+                  (u: any) =>
+                    u.role === "ADMIN" || u.role === "MANAGER"
+                )
+                .map((u: any) => (
+                  <option key={u.user_id} value={u.user_id}>
+                    {u.username.toUpperCase()} ({u.role})
+                  </option>
+                ))}
+            </select>
         </div>
 
         <div className="col-md-4">
