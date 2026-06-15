@@ -6,8 +6,10 @@ import {PageTitle} from "../../../../_metronic/layout/core"
 import {deactivateSSLCertificate, getSSLCertificates} from "../api/sslCertificatesApi"
 import {SSLCertificatesTable} from "../components/SSLCertificatesTable"
 import {SSLCertificatesList} from "../components/SSLCertificatesList"
+import {useAuth} from "../../auth"
 
 export const SSLCertificatesPage = () => {
+  const {currentUser} = useAuth()
   const [certificates, setCertificates] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
@@ -87,9 +89,11 @@ export const SSLCertificatesPage = () => {
         {/* Header */}
         <div className="d-flex justify-content-between align-items-center mb-5">
           <h2>SSL Certificate Manager</h2>
-          <button className="btn btn-danger" onClick={() => navigate("/ssl-certificates/create")}>
-            Add SSL Certificate
-          </button>
+          {currentUser?.role === "ADMIN" && (
+            <button className="btn btn-danger" onClick={() => navigate("/ssl-certificates/create")}>
+              Add SSL Certificate
+            </button>
+          )}
         </div>
 
         {/* Filters */}
