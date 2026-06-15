@@ -10,10 +10,12 @@ import SyncLogsTable from "../../logs/components/SyncLogsTable"
 import DNSChangeLogsTable from "../../logs/components/DNSChangeLogsTable"
 import { getSyncLogs } from "../../logs/api/syncLogsApi"
 import { getDNSChangeLogs } from "../../logs/api/dnsChangeLogsApi"
+import { useAuth } from "../../auth"
 
 const API_URL = import.meta.env.VITE_APP_API_URL
 
 export const DomainViewPage = () => {
+  const {currentUser} = useAuth()
   const {id} = useParams()
   const navigate = useNavigate()
 
@@ -141,12 +143,15 @@ const fetchDNSChangeLogs = async () => {
 
             {/* RIGHT */}
             <div className="d-flex gap-3">
-              <button
-                className="btn btn-light-primary"
-                onClick={() => navigate(`/domains/edit/${domain.domain_id}`)}
-              >
-                Edit
-              </button>
+              
+              {currentUser?.role === "ADMIN" && (
+                <button
+                  className="btn btn-light-primary"
+                  onClick={() => navigate(`/domains/edit/${domain.domain_id}`)}
+                >
+                  Edit
+                </button>
+              )}
 
               <button
                 className="btn btn-light"
@@ -234,44 +239,48 @@ const fetchDNSChangeLogs = async () => {
                 >
                   View
                 </button>
-
-                <button
-                  className="btn btn-light btn-sm"
-                  onClick={() =>
-                    navigate(`/ssl-certificates/${ssl.ssl_id}/edit`)
-                  }
+                {
+                currentUser?.role === "ADMIN" && (
+                  <button
+                    className="btn btn-light btn-sm"
+                    onClick={() =>
+                      navigate(`/ssl-certificates/${ssl.ssl_id}/edit`)
+                    }
                 >
                   Edit
                 </button>
-
+                )}
               </div>
 
             </div>
           )}
           
         </div>
+        { currentUser?.role != "USER" && (
+          <>
+            <div className="card p-5 mb-5">
+                <h4 className="mb-4">DNS Records</h4>
 
-        <div className="card p-5 mb-5">
-            <h4 className="mb-4">DNS Records</h4>
+                {dnsRecords.length === 0 ? (
+                  <div className="text-muted">No DNS records found</div>
+                ) : (
+                  <DNSRecordsTable records={dnsRecords} hideDomain />
+                )}
+            </div>
 
-            {dnsRecords.length === 0 ? (
-              <div className="text-muted">No DNS records found</div>
-            ) : (
-              <DNSRecordsTable records={dnsRecords} hideDomain />
-            )}
-        </div>
+            <div className="mt-10">
+              <ActivityLogsTable logs={logs}  title="Domain Activity Logs" showDropDown={false} />
+            </div>
 
-        <div className="mt-10">
-          <ActivityLogsTable logs={logs}  title="Domain Activity Logs" showDropDown={false} />
-        </div>
+            <div className="mt-10">
+              <SyncLogsTable logs={syncLogs} />
+            </div>
 
-        <div className="mt-10">
-          <SyncLogsTable logs={syncLogs} />
-        </div>
-
-        <div className="mt-10">
-          <DNSChangeLogsTable logs={dnsChangeLogs} />
-        </div>
+            <div className="mt-10">
+              <DNSChangeLogsTable logs={dnsChangeLogs} />
+            </div>
+          </>
+        )}
 
       </Content>
     </>
