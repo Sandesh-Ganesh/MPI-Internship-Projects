@@ -54,7 +54,7 @@ export interface UserModel {
   occupation?: string
   companyName?: string
   phone?: string
-  role?: string 
+  role: 'ADMIN' | 'MANAGER' | 'USER' 
   pic?: string
   language?: 'en' | 'de' | 'es' | 'fr' | 'ja' | 'zh' | 'ru'
   timeZone?: string

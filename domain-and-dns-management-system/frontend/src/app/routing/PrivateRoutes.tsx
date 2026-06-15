@@ -37,6 +37,7 @@ import EditCostCenterPage from '../modules/costCenters/pages/EditCostCenterPage'
 import CreateCostCenterPage from '../modules/costCenters/pages/CreateCostCenterPage'
 import CostCentersPage from '../modules/costCenters/pages/CostCentersPage'
 import UsersPage from '../modules/users/pages/UsersPage'
+import RoleGuard from './RoleGuard'
 
 const PrivateRoutes = () => {
   const WizardsPage = lazy(() => import('../modules/wizards/WizardsPage'))
@@ -49,36 +50,151 @@ const PrivateRoutes = () => {
         <Route path='auth/*' element={<Navigate to='/dashboard' />} />
         {/* Pages */}
         <Route path='dashboard' element={<DashboardWrapper />} />
-        <Route path='/users' element={<UsersPage/>} />
-        <Route path='/companies' element={<CompaniesPage />} />
-        <Route path="/companies/create" element={<CreateCompanyPage />} />
-        <Route path="/companies/view/:id" element={<ViewCompanyPage />} />
-        <Route path="/companies/edit/:id" element={<EditCompanyPage />} />
-        <Route path="/cost-centers" element={<CostCentersPage />} />
-        <Route path="/cost-centers/create" element={<CreateCostCenterPage />} />
-        <Route path="/cost-centers/edit/:id" element={<EditCostCenterPage />} />
-        <Route path="/cost-centers/view/:id" element={<ViewCostCenterPage />} />
-        <Route path='/control-panels' element={<ControlPanelsPage />} />
-        <Route path="/control-panels/create" element={<CreateControlPanelPage />} />
-        <Route path="/control-panels/edit/:id" element={<EditControlPanelPage />} />
-        <Route path="/control-panels/view/:id" element={<ViewControlPanelPage />} />
-        <Route path="/vendors" element={<VendorsPage />} />
-        <Route path="/vendors/create" element={<CreateVendorPage />} />
-        <Route path="/vendors/view/:id" element={<ViewVendorPage />} />
-        <Route path="/vendors/edit/:id" element={<EditVendorPage />} />
-        <Route path='/domains' element={<DomainsPage />} />
-        <Route path="/domains/create" element={<CreateDomainPage />} />
-        <Route path="/domains/view/:id" element={<DomainViewPage />} />
-        <Route path="/domains/edit/:id" element={<EditDomainPage />} />
-        <Route path="/dns-records" element={<DNSRecordsPage />} />
-        <Route path="/ssl-certificates" element={<SSLCertificatesPage />} />
-        <Route path="/ssl-certificates/create" element={<CreateSSLCertificatePage />} />
-        <Route path="/ssl-certificates/:id" element={<SSLCertificateViewPage />}/>
-        <Route path="/ssl-certificates/:id/edit" element={<EditSSLCertificatePage />} />
-        <Route path="/ssl-certificates/:id/timeline" element={<SSLCertificateTimelinePage />}/>
-        <Route path="/activity-logs" element={<ActivityLogsPage />} />
-        <Route path="/dns-sync-logs" element={<SyncLogsPage />} />
-        <Route path="/dns-change-logs" element={<DNSChangeLogsPage />} />
+        <Route path='/users' element={
+          <RoleGuard roles={['ADMIN']}>
+            <UsersPage/>
+          </RoleGuard>
+        } />
+        <Route path='/companies' element={
+          <RoleGuard roles={['ADMIN', 'MANAGER']}>
+            <CompaniesPage/>
+          </RoleGuard>
+        } />
+        <Route path="/companies/create" element={
+          <RoleGuard roles={['ADMIN']}>
+            <CreateCompanyPage/>
+          </RoleGuard>
+        } />
+        <Route path="/companies/view/:id" element={
+          <RoleGuard roles={['ADMIN', 'MANAGER']}>
+            <ViewCompanyPage/>
+          </RoleGuard>
+        } />
+        <Route path="/companies/edit/:id" element={
+          <RoleGuard roles={['ADMIN']}>
+            <EditCompanyPage/>
+          </RoleGuard>
+        } />
+        <Route path="/cost-centers" element={
+          <RoleGuard roles={['ADMIN', 'MANAGER']}>
+            <CostCentersPage/>
+          </RoleGuard>
+        } />
+        <Route path="/cost-centers/create" element={
+          <RoleGuard roles={['ADMIN']}>
+            <CreateCostCenterPage/>
+          </RoleGuard>
+        } />
+        <Route path="/cost-centers/edit/:id" element={
+          <RoleGuard roles={['ADMIN']}>
+            <EditCostCenterPage/>
+          </RoleGuard>
+        } />
+        <Route path="/cost-centers/view/:id" element={
+          <RoleGuard roles={['ADMIN', 'MANAGER']}>
+            <ViewCostCenterPage/>
+          </RoleGuard>
+        } />
+        <Route path='/control-panels' element={
+          <RoleGuard roles={['ADMIN', 'MANAGER']}>
+            <ControlPanelsPage/>
+          </RoleGuard>
+        } />
+        <Route path="/control-panels/create" element={
+          <RoleGuard roles={['ADMIN']}>
+            <CreateControlPanelPage/>
+          </RoleGuard>
+        } />
+        <Route path="/control-panels/edit/:id" element={
+          <RoleGuard roles={['ADMIN']}>
+            <EditControlPanelPage/>
+          </RoleGuard>
+        } />
+        <Route path="/control-panels/view/:id" element={
+          <RoleGuard roles={['ADMIN', 'MANAGER']}>
+            <ViewControlPanelPage/>
+          </RoleGuard>
+        } />
+        <Route path="/vendors" element={
+          <RoleGuard roles={['ADMIN', 'MANAGER']}>
+            <VendorsPage/>
+          </RoleGuard>
+        } />
+        <Route path="/vendors/create" element={
+          <RoleGuard roles={['ADMIN']}>
+            <CreateVendorPage/>
+          </RoleGuard>
+        } />
+        <Route path="/vendors/view/:id" element={
+          <RoleGuard roles={['ADMIN', 'MANAGER']}>
+            <ViewVendorPage/>
+          </RoleGuard>
+        } />
+        <Route path="/vendors/edit/:id" element={
+          <RoleGuard roles={['ADMIN']}>
+            <EditVendorPage/>
+          </RoleGuard>
+        } />
+        <Route path='/domains' element={
+            <DomainsPage/>
+        } />
+
+        <Route path="/domains/create" element={
+          <RoleGuard roles={['ADMIN']}>
+            <CreateDomainPage/>
+          </RoleGuard>
+        } />
+        <Route path="/domains/view/:id" element={
+            <DomainViewPage/>
+        } />
+        <Route path="/domains/edit/:id" element={
+          <RoleGuard roles={['ADMIN']}>
+            <EditDomainPage/>
+          </RoleGuard>
+        } />
+        <Route path="/dns-records" element={
+            <DNSRecordsPage/>
+        } />
+        <Route path="/ssl-certificates" element={
+          <RoleGuard roles={['ADMIN', 'MANAGER']}>
+            <SSLCertificatesPage/>
+          </RoleGuard>
+        } />
+        <Route path="/ssl-certificates/create" element={
+          <RoleGuard roles={['ADMIN']}>
+            <CreateSSLCertificatePage/>
+          </RoleGuard>
+        } />
+        <Route path="/ssl-certificates/:id" element={
+          <RoleGuard roles={['ADMIN', 'MANAGER']}>
+            <SSLCertificateViewPage/>
+          </RoleGuard>
+        } />
+        <Route path="/ssl-certificates/:id/edit" element={
+          <RoleGuard roles={['ADMIN']}>
+            <EditSSLCertificatePage/>
+          </RoleGuard>
+        } />
+        <Route path="/ssl-certificates/:id/timeline" element={
+          <RoleGuard roles={['ADMIN','MANAGER']}>
+            <SSLCertificateTimelinePage/>
+          </RoleGuard>
+        } />
+        <Route path="/activity-logs" element={
+          <RoleGuard roles={['ADMIN', 'MANAGER']}>
+            <ActivityLogsPage/>
+          </RoleGuard>
+        } />
+        <Route path="/dns-sync-logs" element={
+          <RoleGuard roles={['ADMIN', 'MANAGER']}>
+            <SyncLogsPage/>
+          </RoleGuard>
+        } />
+        <Route path="/dns-change-logs" element={
+          <RoleGuard roles={['ADMIN', 'MANAGER']}>
+            <DNSChangeLogsPage/>
+          </RoleGuard>
+        } />
         <Route path='builder' element={<BuilderPageWrapper />} />
         <Route path='menu-test' element={<MenuTestPage />} />
         {/* Lazy Modules */}
