@@ -1,0 +1,21 @@
+name: Domain Monitoring Scheduler
+
+on:
+  schedule:
+    - cron: '30 20 * * *'
+
+  workflow_dispatch:
+
+jobs:
+  monitor-domains:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Domain Monitoring Simulation
+        run: |
+          echo "Checking expiring domains..."
+          echo "Checking SSL certificate validity..."
+          echo "Generating monitoring report..."
