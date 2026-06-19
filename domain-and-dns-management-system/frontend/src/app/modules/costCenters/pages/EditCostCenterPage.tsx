@@ -20,7 +20,7 @@ const EditCostCenterPage = () => {
     try {
       await updateCostCenter(id!, data)
       showToast("Cost Center updated successfully", "success")
-      navigate("/cost-centers")
+      navigate("/cost-centers", { replace:true })
     } catch (error: any) {
       showToast(error?.response?.data?.message || "Error updating cost center", "error")
     }

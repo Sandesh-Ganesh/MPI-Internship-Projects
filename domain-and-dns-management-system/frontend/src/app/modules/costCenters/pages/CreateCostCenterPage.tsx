@@ -13,7 +13,7 @@ const CreateCostCenterPage = () => {
     try {
       await createCostCenter(data)
       showToast("Cost Center created successfully", "success")
-      navigate("/cost-centers")
+      navigate("/cost-centers", { replace:true })
     } catch (error: any) {
       showToast(error?.response?.data?.message || "Error creating cost center", "error")
     }

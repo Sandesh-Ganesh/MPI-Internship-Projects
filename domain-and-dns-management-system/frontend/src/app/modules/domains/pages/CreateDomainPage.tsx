@@ -44,7 +44,7 @@ export const CreateDomainPage = () => {
 
       showToast("Domain created successfully")
 
-      navigate("/domains")
+      navigate("/domains", { replace:true })
     } catch (err) {
       console.error(err)
       showToast("Failed to create domain", "error")

@@ -44,7 +44,7 @@ export const CreateSSLCertificatePage = () => {
 
       // Navigate after short delay (optional)
       setTimeout(() => {
-        navigate(`/ssl-certificates/`)
+        navigate(`/ssl-certificates/`, { replace:true })
       }, 1000)
   
     } catch (error) {

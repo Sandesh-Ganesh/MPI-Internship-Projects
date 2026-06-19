@@ -16,7 +16,7 @@ const EditVendorPage = () => {
   const handleSubmit = async (data: any) => {
     await updateVendor(id!, data)
     showToast("Vendor updated","success")
-    navigate("/vendors")
+    navigate("/vendors", { replace:true })
   }
 
   return vendor && (

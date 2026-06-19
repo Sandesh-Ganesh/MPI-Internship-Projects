@@ -52,7 +52,7 @@ export const EditDomainPage = () => {
 
       showToast("Domain updated successfully", "success")
 
-      navigate("/domains")
+      navigate("/domains", { replace:true })
     } catch (err) {
       console.error(err)
       showToast("Failed to update domain", "error")
