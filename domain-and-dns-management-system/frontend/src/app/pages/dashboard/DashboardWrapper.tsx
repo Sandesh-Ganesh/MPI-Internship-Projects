@@ -43,8 +43,8 @@ const DashboardPage: FC = () => {
 
       const [summaryRes, activitiesRes, alertsRes] = await Promise.all([
         getSummary(),
-        getRecentActivities(),
-        getAlerts(),
+        currentUser?.role != 'USER' ? getRecentActivities() : [],
+        currentUser?.role != 'USER' ? getAlerts() : [],
       ])
 
       setSummary(summaryRes?.data || null)
