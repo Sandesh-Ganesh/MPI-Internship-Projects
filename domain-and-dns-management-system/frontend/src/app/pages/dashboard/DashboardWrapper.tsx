@@ -176,7 +176,7 @@ const DashboardPage: FC = () => {
                         </div>
 
                         <div className='text-gray-600'>
-                          {alerts?.expiringSSLs?.length || 0} SSL certificates
+                          {summary?.expiringSSLs || 0} SSL certificates
                           expiring within 30 days
                         </div>
                       </div>

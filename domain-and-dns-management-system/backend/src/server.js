@@ -12,6 +12,7 @@ import costCenterRoutes from './routes/costCenterRoutes.js';
 import domainRoutes from './routes/domainRoutes.js'
 import "./cron/dnsSyncJob.js"
 import "./cron/sslStatusJob.js"
+import "./cron/domainStatusJob.js"
 import dnsRoutes from './routes/dnsRoutes.js'
 import activityLogRoutes from './routes/activityLogRoutes.js'
 import SSLCerticateRoutes from './routes/SSLCertificateRoutes.js'

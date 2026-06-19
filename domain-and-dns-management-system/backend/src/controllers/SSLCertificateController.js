@@ -106,7 +106,7 @@ export const getAllSSLCertificates = async (req, res) => {
           attributes: ["user_id", "username"],
         }
       ],
-      order: [["ssl_id", "DESC"]],
+      order: [["ssl_id", "DESC"],["expiry_date"] ],
     })
 
     return res.status(200).json(data)

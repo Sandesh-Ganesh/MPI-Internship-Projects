@@ -9,8 +9,8 @@ import { Op } from 'sequelize'
 export const getDashboardSummary = async (req, res) => {
   const today = new Date()
 
-const next7Days = new Date()
-next7Days.setDate(today.getDate() + 7)
+const next30Days = new Date()
+next30Days.setDate(today.getDate() + 30)
 
   try {
     const [
@@ -37,7 +37,7 @@ next7Days.setDate(today.getDate() + 7)
         where: {
           status: 'ACTIVE',
           expiry_date: {
-            [Op.between]: [today, next7Days]
+            [Op.between]: [today, next30Days]
           }
         }
       }),
@@ -109,7 +109,7 @@ export const getDashboardAlerts = async (req, res) => {
     const expiringSSLs = await SSLCertificate.count({
       where: {
         expiry_date: {
-          [Op.lte]: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+          [Op.lte]: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
         },
       },
     })
