@@ -86,8 +86,10 @@ const DashboardPage: FC = () => {
       title: 'SSL Certificates',
       value: summary?.totalSSLCertificates || 0,
       icon: 'ki-outline ki-shield-tick',
-      color: 'success',
-      change: `${summary?.expiringSSLs || 0} expiring soon`,
+      color: 'warning',
+      change: `${summary?.expiringSSLs || 0} expiring • ${
+        summary?.expiredSSLs || 0
+      } expired`,
       roles: ['ADMIN', 'MANAGER'],
     },
 

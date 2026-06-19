@@ -40,7 +40,7 @@ export const createSSLCertificate = async (req, res) => {
 
     // deactivate old SSL if exists
     if (oldSSL) {
-      await oldSSL.update({ status: "INACTIVE" }, { transaction: t })
+      await oldSSL.update({ status: "RENEWED" }, { transaction: t })
     }
 
     // create new SSL with parent link

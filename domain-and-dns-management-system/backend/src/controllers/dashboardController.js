@@ -7,6 +7,11 @@ import ActivityLog from '../models/ActivityLog.js'
 import { Op } from 'sequelize'
 
 export const getDashboardSummary = async (req, res) => {
+  const today = new Date()
+
+const next7Days = new Date()
+next7Days.setDate(today.getDate() + 7)
+
   try {
     const [
       totalDomains,
@@ -14,21 +19,31 @@ export const getDashboardSummary = async (req, res) => {
       totalSSLCertificates,
       totalVendors,
       totalCompanies,
+      totalSSLs,
       expiringSSLs,
+      expiredSSLs
     ] = await Promise.all([
       Domain.count(),
       DNSRecord.count(),
-      SSLCertificate.count(),
+      SSLCertificate.count({
+        where:{ status : 'ACTIVE' }
+      }),
       Vendor.count(),
       Company.count(),
-
+      SSLCertificate.count({
+        where:{ status : 'ACTIVE' }
+      }),
       SSLCertificate.count({
         where: {
+          status: 'ACTIVE',
           expiry_date: {
-            [Op.lte]: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-          },
-        },
+            [Op.between]: [today, next7Days]
+          }
+        }
       }),
+      SSLCertificate.count({
+        where:{ status : 'EXPIRED' }
+      })
     ])
 
     return res.status(200).json({
@@ -40,6 +55,7 @@ export const getDashboardSummary = async (req, res) => {
         totalVendors,
         totalCompanies,
         expiringSSLs,
+        expiredSSLs
       },
     })
   } catch (error) {
