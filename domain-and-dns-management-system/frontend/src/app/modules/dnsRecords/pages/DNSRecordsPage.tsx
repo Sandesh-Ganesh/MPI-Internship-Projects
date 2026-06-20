@@ -6,8 +6,11 @@ import { Content } from "../../../../_metronic/layout/components/content"
 import { getDNSRecords, getDomains } from "../api/dnsRecordsApi"
 import DNSRecordsTable from "../components/DNSRecordsTable"
 import { syncAllDomains, syncDomain } from "../api/dnsRecordsApi"
+import { useAuth } from "../../../modules/auth"
 
 const DNSRecordsPage = () => {
+  const { currentUser } = useAuth()
+
   const [records, setRecords] = useState<any[]>([])
   const [domains, setDomains] = useState<any[]>([])
   const [selectedDomain, setSelectedDomain] = useState("")
@@ -119,13 +122,17 @@ const DNSRecordsPage = () => {
         )}
 
         <div className="mb-5 d-flex justify-content-end">
-          <button
-            className="btn btn-primary"
-            onClick={handleSyncAll}
-            disabled={syncing}
-          >
-            {syncing ? "Syncing..." : "Sync All"}
-          </button>
+          { currentUser?.role != 'USER' ? 
+            <button
+              className="btn btn-primary"
+              onClick={handleSyncAll}
+              disabled={syncing}
+            >
+              {syncing ? "Syncing..." : "Sync All"}
+            </button>
+            :
+              null
+          }
         </div>
         {/* FILTER */}
         <div className="mb-5 d-flex flex-wrap align-items-center gap-3">
@@ -172,14 +179,17 @@ const DNSRecordsPage = () => {
           <button className="btn btn-light" onClick={handleSearch}>
             Search
           </button>
-
-          <button
-            className="btn btn-light-primary"
-            disabled={!selectedDomain || syncingDomain}
-            onClick={handleSyncDomain}
-          >
-            {syncingDomain ? "Syncing..." : "Sync Domain"}
-          </button>
+          { currentUser?.role != 'USER' ? 
+            <button
+              className="btn btn-light-primary"
+              disabled={!selectedDomain || syncingDomain}
+              onClick={handleSyncDomain}
+            >
+              {syncingDomain ? "Syncing..." : "Sync Domain"}
+            </button>
+          :
+            null
+          } 
         </div>
 
         {/* TABLE */}

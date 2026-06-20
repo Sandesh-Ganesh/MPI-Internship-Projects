@@ -9,7 +9,7 @@ const CreateVendorPage = () => {
   const handleSubmit = async (data: any) => {
     await createVendor(data)
     showToast("Vendor created","success")
-    navigate("/vendors")
+    navigate("/vendors", { replace:true })
   }
 
   return <VendorForm onSubmit={handleSubmit} mode="create" />

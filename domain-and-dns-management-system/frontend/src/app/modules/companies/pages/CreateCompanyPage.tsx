@@ -13,7 +13,7 @@ const CreateCompanyPage = () => {
     try {
       await createCompany(data)
       showToast("Company created successfully", "success")
-      navigate("/companies")
+      navigate("/companies", {replace:true} )
     } catch (error: any) {
       showToast(error?.response?.data?.message || "Error creating company", "error")
     }

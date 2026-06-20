@@ -5,8 +5,10 @@ import {Content} from "../../../../_metronic/layout/components/content"
 import {ToolbarWrapper} from "../../../../_metronic/layout/components/toolbar"
 import {useNavigate} from "react-router-dom"
 import {DomainsList} from "../components/DomainsList"
+import { useAuth } from "../../auth"
 
 export const DomainsPage = () => {
+  const { currentUser }= useAuth()
   const [domains, setDomains] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
@@ -49,13 +51,14 @@ export const DomainsPage = () => {
         {/* 🔥 HEADER */}
         <div className="d-flex justify-content-between align-items-center mb-5">
           <h2>Domain Manager</h2>
-
+          {currentUser?.role === "ADMIN" && (
           <button
             className="btn btn-danger"
             onClick={() => navigate("/domains/create")}
           >
             Add New Domain
           </button>
+          )}
         </div>
 
         {/* 🔍 SEARCH */}

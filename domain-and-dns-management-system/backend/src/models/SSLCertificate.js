@@ -72,7 +72,7 @@ const SSLCertificate = sequelize.define(
     },
 
     status: {
-      type: DataTypes.ENUM("ACTIVE","EXPIRED","INACTIVE"),
+      type: DataTypes.ENUM("ACTIVE","EXPIRED","INACTIVE","RENEWED"),
       defaultValue: "ACTIVE"
     }
   },

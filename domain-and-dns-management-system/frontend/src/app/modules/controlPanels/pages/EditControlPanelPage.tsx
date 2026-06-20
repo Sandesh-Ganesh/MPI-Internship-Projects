@@ -20,7 +20,7 @@ const EditControlPanelPage = () => {
     try {
       await updateControlPanel(id!, data)
     //   toast.success("Control Panel updated successfully")
-      navigate("/control-panels")
+      navigate("/control-panels", {replace:true})
     } catch (error: any) {
     //   toast.error(error?.response?.data?.message || "Error updating control panel")
     }

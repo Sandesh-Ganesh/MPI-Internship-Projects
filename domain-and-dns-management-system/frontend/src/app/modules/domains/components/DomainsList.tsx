@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom"
+import { useAuth } from "../../auth"
 
 export const DomainsList = ({ domains }: any) => {
+  const {currentUser} = useAuth()
   const navigate = useNavigate()
 
   const getExpiryStatus = (expiry_date: string) => {
@@ -101,7 +103,7 @@ export const DomainsList = ({ domains }: any) => {
                             View
                           </button>
                         </li>
-
+                        {currentUser?.role === "ADMIN" && (
                         <li>
                           <button
                             className="dropdown-item"
@@ -112,6 +114,7 @@ export const DomainsList = ({ domains }: any) => {
                             Edit
                           </button>
                         </li>
+                      )}
                       </ul>
                     </div>
                   </div>

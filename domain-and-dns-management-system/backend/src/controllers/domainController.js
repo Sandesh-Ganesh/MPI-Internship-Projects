@@ -86,7 +86,8 @@ export const getAllDomains = async (req,res)=>{
           model: Vendor,
           attributes: ["vendor_id", "vendor_name"]
         },
-      ]
+      ],
+      order: [["expiry_date"]] 
     })
 
     return res.status(200).json(domains)

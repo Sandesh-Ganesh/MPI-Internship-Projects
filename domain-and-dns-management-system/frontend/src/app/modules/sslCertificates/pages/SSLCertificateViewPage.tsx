@@ -5,7 +5,7 @@ import {PageTitle} from "../../../../_metronic/layout/core"
 import {getSSLCertificateById} from "../api/sslCertificatesApi"
 import { getActivityLogs } from "../../logs/api/activityLogsApi"
 import ActivityLogsTable from "../../logs/components/ActivityLogsTable"
-
+import {useAuth} from "../../auth"
 const Detail = ({label, value}: any) => (
   <div className="col-md-4 mb-4">
     <div className="text-muted fs-7">{label}</div>
@@ -19,6 +19,7 @@ const formatDate = (date?: string) => {
 }
 
 export const SSLCertificateViewPage = () => {
+  const {currentUser} = useAuth()
   const {id} = useParams()
   const navigate = useNavigate()
   const [ssl, setSSL] = useState<any>(null)
@@ -83,13 +84,14 @@ export const SSLCertificateViewPage = () => {
             >
               View History
             </button>
-
+              {currentUser?.role === "ADMIN" && (
             <button
               className="btn btn-primary"
               onClick={() => navigate(`/ssl-certificates/${ssl.ssl_id}/edit`)}
             >
               Edit
             </button>
+              )}
           </div>
         </div>
 

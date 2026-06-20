@@ -43,8 +43,8 @@ const DashboardPage: FC = () => {
 
       const [summaryRes, activitiesRes, alertsRes] = await Promise.all([
         getSummary(),
-        getRecentActivities(),
-        getAlerts(),
+        currentUser?.role != 'USER' ? getRecentActivities() : [],
+        currentUser?.role != 'USER' ? getAlerts() : [],
       ])
 
       setSummary(summaryRes?.data || null)
@@ -86,8 +86,10 @@ const DashboardPage: FC = () => {
       title: 'SSL Certificates',
       value: summary?.totalSSLCertificates || 0,
       icon: 'ki-outline ki-shield-tick',
-      color: 'success',
-      change: `${summary?.expiringSSLs || 0} expiring soon`,
+      color: 'warning',
+      change: `${summary?.expiringSSLs || 0} expiring • ${
+        summary?.expiredSSLs || 0
+      } expired`,
       roles: ['ADMIN', 'MANAGER'],
     },
 
@@ -174,7 +176,7 @@ const DashboardPage: FC = () => {
                         </div>
 
                         <div className='text-gray-600'>
-                          {alerts?.expiringSSLs?.length || 0} SSL certificates
+                          {summary?.expiringSSLs || 0} SSL certificates
                           expiring within 30 days
                         </div>
                       </div>

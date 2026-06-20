@@ -63,7 +63,7 @@ export const EditSSLCertificatePage = () => {
 
       // Navigate after short delay (optional)
       setTimeout(() => {
-        navigate(`/ssl-certificates/${id}`)
+        navigate(`/ssl-certificates/${id}`, { replace:true })
       }, 800)
 
     } catch (error) {

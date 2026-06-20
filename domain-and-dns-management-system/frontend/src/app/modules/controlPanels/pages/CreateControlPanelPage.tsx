@@ -13,7 +13,7 @@ const CreateControlPanelPage = () => {
     try {
       await createControlPanel(data)
       showToast("Control Panel created successfully", "success")
-      navigate("/control-panels")
+      navigate("/control-panels", {replace:true})
     } catch (error: any) {
       showToast(error?.response?.data?.message || "Error creating control panel", "error")
     }
