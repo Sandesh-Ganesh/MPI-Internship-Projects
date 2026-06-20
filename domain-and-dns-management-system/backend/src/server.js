@@ -28,8 +28,12 @@ import {
   SSLCertificate,
   ActivityLog,
   DNSSyncLog,
-  User} from './models/index.js'
+  User,
+  Notification
+} from './models/index.js'
 import dashboardRoutes from './routes/dashboardRoutes.js'
+import notificationRoutes from "./routes/notificationRoutes.js"
+
 dotenv.config();
 
 const app=express();
@@ -73,6 +77,8 @@ app.use("/api", dnsSyncLogRoutes)
 app.use("/api/dns-change-logs",dnsChangeLogRoutes)
 
 app.use("/api/dashboard", dashboardRoutes)
+
+app.use("/api/notifications", notificationRoutes)
 
 const startServer = async () => {
   await connectDB();

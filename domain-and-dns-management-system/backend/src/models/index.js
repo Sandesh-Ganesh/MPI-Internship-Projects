@@ -11,6 +11,7 @@ import ActivityLog from "./ActivityLog.js"
 import DNSSyncLog from "./DNSSyncLog.js"
 import User from "./User.js"
 import DNSChangeLog from "./DNSChangeLog.js"
+import Notification from "./Notification.js"
 
 //  Company → CostCenter
 Company.hasMany(CostCenter, { foreignKey: "company_id" })
@@ -112,7 +113,8 @@ export {
   SSLCertificate,
   ActivityLog,
   DNSSyncLog,
-  User
+  User,
+  Notification
 }
 
 //Associations for DNS Change Logs (defined here to avoid circular imports)
