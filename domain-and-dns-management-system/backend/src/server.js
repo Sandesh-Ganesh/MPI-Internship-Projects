@@ -34,6 +34,7 @@ import {
 import dashboardRoutes from './routes/dashboardRoutes.js'
 import notificationRoutes from "./routes/notificationRoutes.js"
 import {runAllJobs} from "./cron/runAllJobs.js"
+import reportRoutes from "./routes/reportRoutes.js"
 dotenv.config();
 
 const app=express();
@@ -79,6 +80,8 @@ app.use("/api/dns-change-logs",dnsChangeLogRoutes)
 app.use("/api/dashboard", dashboardRoutes)
 
 app.use("/api/notifications", notificationRoutes)
+
+app.use("/api/reports", reportRoutes)
 
 const startServer = async () => {
   await connectDB();

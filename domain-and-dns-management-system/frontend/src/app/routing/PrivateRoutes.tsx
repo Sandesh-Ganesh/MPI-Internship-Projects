@@ -39,6 +39,7 @@ import CostCentersPage from '../modules/costCenters/pages/CostCentersPage'
 import UsersPage from '../modules/users/pages/UsersPage'
 import RoleGuard from './RoleGuard'
 import NotificationList from '../modules/notifications/pages/NotifcationList'
+import ReportsList from '../modules/reports/pages/ReportsList'
 
 const PrivateRoutes = () => {
   const WizardsPage = lazy(() => import('../modules/wizards/WizardsPage'))
@@ -199,6 +200,11 @@ const PrivateRoutes = () => {
         <Route path="/notifications" element={
           <RoleGuard roles={['ADMIN']}>
             <NotificationList/>
+          </RoleGuard>
+        } />
+        <Route path="/reports" element={
+          <RoleGuard roles={['ADMIN']}>
+            <ReportsList/>
           </RoleGuard>
         } />
         <Route path='builder' element={<BuilderPageWrapper />} />
