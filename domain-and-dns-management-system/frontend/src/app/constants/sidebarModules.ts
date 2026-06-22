@@ -76,6 +76,10 @@ export const sidebarModules = [
         title: 'DNS Change Logs',
         to: '/dns-change-logs',
       },
+      {
+        title: 'Reports',
+        to: '/reports',
+      },
     ],
   },
 
