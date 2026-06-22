@@ -24,3 +24,24 @@ export const markAllNotificationsRead = async () => {
 
   return res.data
 }
+
+export const getNotificationsPaginated = async (
+  page = 1,
+  limit = 20,
+  source = '',
+  type = ''
+) => {
+  const params = new URLSearchParams()
+
+  params.append('page', page.toString())
+  params.append('limit', limit.toString())
+
+  if (source) params.append('source', source)
+  if (type) params.append('type', type)
+
+  const res = await axios.get(
+    `${API_URL}/notifications?${params.toString()}`
+  )
+
+  return res.data
+}

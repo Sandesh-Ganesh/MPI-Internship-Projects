@@ -2,12 +2,34 @@ import { Notification } from "../models/index.js"
 
 export const getNotifications = async (req, res) => {
   try {
-    const notifications = await Notification.findAll({
-      order: [["createdAt", "DESC"]],
-      limit: 20,
-    })
+    const {
+      page = 1,
+      limit = 20,
+      source,
+      type,
+    } = req.query
 
-    return res.status(200).json(notifications)
+    const where = {}
+
+    if (source) where.source = source
+    if (type) where.type = type
+
+    const offset = (Number(page) - 1) * Number(limit)
+
+    const { count, rows } =
+      await Notification.findAndCountAll({
+        where,
+        order: [["createdAt", "DESC"]],
+        limit: Number(limit),
+        offset,
+      })
+
+    return res.status(200).json({
+      notifications: rows,
+      total: count,
+      page: Number(page),
+      totalPages: Math.ceil(count / Number(limit)),
+    })
   } catch (error) {
     console.error("Get Notifications Error:", error)
 

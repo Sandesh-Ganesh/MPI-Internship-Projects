@@ -7,20 +7,14 @@ import {
 } from "../controllers/notificationController.js"
 
 import { authenticateToken } from "../middleware/authMiddleware.js"
+import { allowRoles } from "../middleware/roleMiddleware.js"
 const router = express.Router()
 
 router.use(authenticateToken)
+router.get("/", allowRoles("ADMIN"), getNotifications )
 
-router.get("/", getNotifications)
+router.patch( "/:id/read", allowRoles("ADMIN"),  markNotificationRead )
 
-router.patch(
-  "/:id/read",
-  markNotificationRead
-)
-
-router.patch(
-  "/read-all",
-  markAllNotificationsRead
-)
+router.patch( "/read-all", allowRoles("ADMIN"),  markAllNotificationsRead )
 
 export default router

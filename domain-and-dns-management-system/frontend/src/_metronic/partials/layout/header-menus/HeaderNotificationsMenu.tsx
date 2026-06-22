@@ -1,33 +1,22 @@
-import {FC, useEffect, useState} from 'react'
+import {FC} from 'react'
 import clsx from 'clsx'
-import {KTIcon, toAbsoluteUrl} from '../../../helpers'
-
-import {
-  getNotifications,
-  markAllNotificationsRead,
-} from '../../../../app/modules/notifications/api/notificationService'
-
-import {Notification} from '../../../../app/modules/notifications/types/notificationTypes'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import { Link } from "react-router-dom"
+import {KTIcon, toAbsoluteUrl} from '../../../helpers'
+
+import {markAllNotificationsRead, markNotificationRead } from '../../../../app/modules/notifications/api/notificationService'
+import {Notification} from '../../../../app/modules/notifications/types/notificationTypes'
+import {useNotifications} from '../../../../app/modules/notifications/context/NotificationContext'
 
 dayjs.extend(relativeTime)
 
 const HeaderNotificationsMenu: FC = () => {
-  const [notifications, setNotifications] = useState<Notification[]>([])
-
-  const fetchNotifications = async () => {
-    try {
-      const data = await getNotifications()
-      setNotifications(data)
-    } catch (error) {
-      console.error('Failed to fetch notifications:', error)
-    }
-  }
-
-  useEffect(() => {
-    fetchNotifications()
-  }, [])
+  const {
+    notifications,
+    unreadCount,
+    refreshNotifications,
+  } = useNotifications()
 
   const getNotificationMeta = (notification: Notification) => {
     switch (notification.source) {
@@ -58,16 +47,13 @@ const HeaderNotificationsMenu: FC = () => {
       default:
         return {
           icon: 'notification-status',
-          state: notification.type === 'error'
-            ? 'danger'
-            : notification.type,
+          state:
+            notification.type === 'error'
+              ? 'danger'
+              : notification.type,
         }
     }
   }
-
-  const unreadCount = notifications.filter(
-    (notification) => !notification.is_read
-  ).length
 
   return (
     <div
@@ -82,7 +68,7 @@ const HeaderNotificationsMenu: FC = () => {
             'media/misc/menu-header-bg.jpg'
           )}')`,
         }}
->
+      >
         <h3 className='text-white fw-bold px-9 mt-8 mb-2'>
           Notifications
         </h3>
@@ -106,6 +92,10 @@ const HeaderNotificationsMenu: FC = () => {
               <div
                 key={notification.notification_id}
                 className='d-flex flex-stack py-4'
+                onClick={async () => {
+                  await markNotificationRead(notification.notification_id)
+                  await refreshNotifications()
+                }}
               >
                 <div className='d-flex align-items-center'>
                   <div className='symbol symbol-35px me-4'>
@@ -130,10 +120,11 @@ const HeaderNotificationsMenu: FC = () => {
                     <div className='text-gray-500 fs-7'>
                       {notification.message}
                     </div>
+
+                    <span className='badge badge-light-secondary fs-8 mt-1'>
+                      {notification.source}
+                    </span>
                   </div>
-                  <span className='badge badge-light-warning fs-8'>
-                    {notification.source}
-                  </span>
                 </div>
 
                 <div className='text-end'>
@@ -154,13 +145,13 @@ const HeaderNotificationsMenu: FC = () => {
       </div>
 
       {/* Footer */}
-      <div className='py-3 text-center border-top'>
+     <div className='py-3 text-center border-top d-flex justify-content-center gap-2'>
         <button
           className='btn btn-sm btn-light-primary'
           onClick={async () => {
             try {
               await markAllNotificationsRead()
-              fetchNotifications()
+              await refreshNotifications()
             } catch (error) {
               console.error(error)
             }
@@ -169,6 +160,14 @@ const HeaderNotificationsMenu: FC = () => {
           <KTIcon iconName='check' className='fs-5' />
           Mark All Read
         </button>
+
+        <Link
+          to='/notifications'
+          className='btn btn-sm btn-light'
+        >
+          View All
+          <KTIcon iconName='arrow-right' className='fs-5 ms-1' />
+        </Link>
       </div>
     </div>
   )

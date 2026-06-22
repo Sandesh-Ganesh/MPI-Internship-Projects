@@ -33,7 +33,7 @@ import {
 } from './models/index.js'
 import dashboardRoutes from './routes/dashboardRoutes.js'
 import notificationRoutes from "./routes/notificationRoutes.js"
-
+import {runAllJobs} from "./cron/runAllJobs.js"
 dotenv.config();
 
 const app=express();
@@ -87,6 +87,8 @@ const startServer = async () => {
   await sequelize.sync();
 
   console.log("Tables synced ✅");
+
+  //runAllJobs()
 
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT} 🚀`);
