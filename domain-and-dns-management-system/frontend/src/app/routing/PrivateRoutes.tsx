@@ -38,6 +38,7 @@ import CreateCostCenterPage from '../modules/costCenters/pages/CreateCostCenterP
 import CostCentersPage from '../modules/costCenters/pages/CostCentersPage'
 import UsersPage from '../modules/users/pages/UsersPage'
 import RoleGuard from './RoleGuard'
+import NotificationList from '../modules/notifications/pages/NotifcationList'
 
 const PrivateRoutes = () => {
   const WizardsPage = lazy(() => import('../modules/wizards/WizardsPage'))
@@ -193,6 +194,11 @@ const PrivateRoutes = () => {
         <Route path="/dns-change-logs" element={
           <RoleGuard roles={['ADMIN', 'MANAGER']}>
             <DNSChangeLogsPage/>
+          </RoleGuard>
+        } />
+        <Route path="/notifications" element={
+          <RoleGuard roles={['ADMIN']}>
+            <NotificationList/>
           </RoleGuard>
         } />
         <Route path='builder' element={<BuilderPageWrapper />} />

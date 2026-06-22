@@ -2,7 +2,8 @@ import clsx from 'clsx'
 import {KTIcon, toAbsoluteUrl} from '../../../helpers'
 import {HeaderNotificationsMenu, HeaderUserMenu, Search, ThemeModeSwitcher} from '../../../partials'
 import {useLayout} from '../../core'
-
+import {useNotifications} from '../../../../app/modules/notifications/context/NotificationContext'
+import { useAuth } from "../../../../app/modules/auth"
 const itemClass = 'ms-1 ms-md-4'
 const btnClass =
   'btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px'
@@ -11,6 +12,8 @@ const btnIconClass = 'fs-2'
 
 const Navbar = () => {
   const {config} = useLayout()
+  const {unreadCount} = useNotifications()
+  const { currentUser } = useAuth()
   return (
     <div className='app-navbar flex-shrink-0'>
       {/* <div className={clsx('app-navbar-item align-items-stretch', itemClass)}>
@@ -22,25 +25,32 @@ const Navbar = () => {
           <KTIcon iconName='chart-simple' className={btnIconClass} />
         </div>
       </div> */}
+      { currentUser?.role === 'ADMIN' ? 
+          <div className={clsx('app-navbar-item', itemClass)}>
+            <div
+              data-kt-menu-trigger="{default: 'click'}"
+              data-kt-menu-attach='parent'
+              data-kt-menu-placement='bottom-end'
+              className={clsx('position-relative', btnClass)}
+            >
+              <KTIcon iconName='notification' className={btnIconClass} />
+              {unreadCount > 0 && (
+                <span className='bullet bullet-dot bg-success h-6px w-6px position-absolute translate-middle top-0 start-50 animation-blink' />
+              )}
+            </div>
+            <HeaderNotificationsMenu />
+          </div>
+        :
+          null
+      }
 
-      {/* <div className={clsx('app-navbar-item', itemClass)}>
-        <div
-          data-kt-menu-trigger="{default: 'click'}"
-          data-kt-menu-attach='parent'
-          data-kt-menu-placement='bottom-end'
-          className={btnClass}
-        >
-          <KTIcon iconName='element-plus' className={btnIconClass} />
-        </div>
-        <HeaderNotificationsMenu />
-      </div> */}
 
       {/* <div className={clsx('app-navbar-item', itemClass)}>
         <div className={clsx('position-relative', btnClass)} id='kt_drawer_chat_toggle'>
           <KTIcon iconName='message-text-2' className={btnIconClass} />
           <span className='bullet bullet-dot bg-success h-6px w-6px position-absolute translate-middle top-0 start-50 animation-blink' />
         </div>
-      </div> */}
+      </div>  */}
 
       <div className={clsx('app-navbar-item', itemClass)}>
         <ThemeModeSwitcher toggleBtnClass={clsx('btn-active-light-primary btn-custom')} />
