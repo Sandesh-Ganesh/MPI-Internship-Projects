@@ -30,7 +30,7 @@ const AuthLayout = () => {
 
         {/* Footer */}
         <div className='text-center text-gray-500 fs-7 fw-semibold py-5'>
-          © {new Date().getFullYear()} DNS Management System
+          © {new Date().getFullYear()} DNS and Domain Management System
         </div>
       </div>
 
@@ -45,7 +45,7 @@ const AuthLayout = () => {
           {/* Title */}
           <div className='text-center mb-10'>
             <h1 className='text-white fs-2hx fw-bolder mb-5'>
-              DNS Management System
+              DNS and Domain Management System
             </h1>
 
             <div className='text-white opacity-75 fs-4'>
@@ -58,7 +58,7 @@ const AuthLayout = () => {
           {/* Illustration */}
           <img
             className='mx-auto w-275px w-md-50 w-xl-500px'
-            src={toAbsoluteUrl('media/misc/auth-screens.png')}
+            src={toAbsoluteUrl('media/misc/dns-dashboard.png')}
             alt='DNS Management System'
           />
         </div>

@@ -11,7 +11,7 @@ import {
 } from '../api/notificationService'
 
 import {Notification} from '../types/notificationTypes'
-
+import { useAuth } from '../../../../app/modules/auth'
 interface NotificationContextType {
   notifications: Notification[]
   unreadCount: number
@@ -41,10 +41,12 @@ export const NotificationProvider = ({
       setLoading(false)
     }
   }
-
+  const { currentUser } = useAuth()
   useEffect(() => {
-    refreshNotifications()
-  }, [])
+    if(currentUser?.role === 'ADMIN'){
+      refreshNotifications()
+    }
+  }, [currentUser])
 
   const unreadCount = notifications.filter(
     (notification) => !notification.is_read
