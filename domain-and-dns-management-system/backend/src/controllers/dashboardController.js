@@ -9,8 +9,8 @@ import { Op } from 'sequelize'
 export const getDashboardSummary = async (req, res) => {
   const today = new Date()
 
-const next30Days = new Date()
-next30Days.setDate(today.getDate() + 30)
+  const next30Days = new Date()
+  next30Days.setDate(today.getDate() + 30)
 
   try {
     const [
@@ -19,9 +19,9 @@ next30Days.setDate(today.getDate() + 30)
       totalSSLCertificates,
       totalVendors,
       totalCompanies,
-      totalSSLs,
       expiringSSLs,
-      expiredSSLs
+      expiredSSLs,
+      renewedSSLs
     ] = await Promise.all([
       Domain.count(),
       DNSRecord.count(),
@@ -30,9 +30,6 @@ next30Days.setDate(today.getDate() + 30)
       }),
       Vendor.count(),
       Company.count(),
-      SSLCertificate.count({
-        where:{ status : 'ACTIVE' }
-      }),
       SSLCertificate.count({
         where: {
           status: 'ACTIVE',
@@ -43,6 +40,9 @@ next30Days.setDate(today.getDate() + 30)
       }),
       SSLCertificate.count({
         where:{ status : 'EXPIRED' }
+      }),
+      SSLCertificate.count({
+        where:{ status : 'RENEWED' }
       })
     ])
 
@@ -55,7 +55,8 @@ next30Days.setDate(today.getDate() + 30)
         totalVendors,
         totalCompanies,
         expiringSSLs,
-        expiredSSLs
+        expiredSSLs,
+        renewedSSLs
       },
     })
   } catch (error) {
@@ -108,8 +109,9 @@ export const getDashboardAlerts = async (req, res) => {
 
     const expiringSSLs = await SSLCertificate.count({
       where: {
+        status: 'ACTIVE',
         expiry_date: {
-          [Op.lte]: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+          [Op.between]: [today, next30Days],
         },
       },
     })
